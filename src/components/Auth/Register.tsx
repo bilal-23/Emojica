@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
 import React, { useState } from "react";
-import { Icons } from "@/components/ui/Icons";
+import { Icons } from "@/components/UI/Icons";
 import InputComponent from "./Register-Input";
-import { buttonVariants } from "@/components/ui/Button";
+import { buttonVariants } from "@/components/UI/Button";
 import { useValidateRegisterForm } from "@/hooks/use-validate-register-form";
 
 export interface error {

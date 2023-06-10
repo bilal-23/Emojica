@@ -1,4 +1,4 @@
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/components/UI/use-toast";
 import { validate } from "@/lib/validate";
 interface error {
     message: string;

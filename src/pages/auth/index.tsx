@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
 import Login from "@/components/Auth/Login";
-import { Icons } from "@/components/ui/Icons";
+import { Icons } from "@/components/UI/Icons";
 import Register from "@/components/Auth/Register";
 
 const Auth: React.FC = () => {

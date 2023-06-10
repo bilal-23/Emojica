@@ -1,6 +1,6 @@
 import React from "react";
-import { Input } from "@/components/ui/Input";
-import { Label } from "../../components/ui/Label";
+import { Input } from "@/components/UI/Input";
+import { Label } from "../UI/Label";
 import { error } from "./Register";
 
 interface Props {

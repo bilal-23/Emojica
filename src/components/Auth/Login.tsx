@@ -1,12 +1,12 @@
 import { Metadata } from "next";
 import { cn } from "@/lib/utils";
 import React, { useState } from "react";
-import { Icons } from "@/components/ui/Icons";
-import { Input } from "@/components/ui/Input";
-import { buttonVariants } from "@/components/ui/Button";
+import { Icons } from "@/components/UI/Icons";
+import { Input } from "@/components/UI/Input";
+import { buttonVariants } from "@/components/UI/Button";
 import { validate } from "@/lib/validate";
-import { toast } from "../ui/use-toast";
-import { Label } from "../ui/Label";
+import { toast } from "../UI/use-toast";
+import { Label } from "../UI/Label";
 
 export const metadata: Metadata = {
   title: "Login",

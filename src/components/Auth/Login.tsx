@@ -21,7 +21,7 @@ export default function Login() {
   };
 
   return (
-    <form onSubmit={handleSubmit} autoComplete="off">
+    <form onSubmit={handleSubmit} autoComplete="off" className="pt-10">
       <div className="grid gap-2">
         <div className="grid gap-4">
           <Label className="sr-only" htmlFor="email">

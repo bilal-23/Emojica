@@ -1,3 +1,5 @@
+import { GetServerSideProps } from "next";
+
 export default function Home() {
   return (
     <main
@@ -5,3 +7,12 @@ export default function Home() {
     ></main>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  return {
+    redirect: {
+      destination: "/auth",
+      permanent: false,
+    },
+  };
+};

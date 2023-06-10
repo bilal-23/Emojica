@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { cn } from "@/lib/utils";
 import React, { useState } from "react";
-import { Label } from "@/components/ui/Label";
+import { Label } from "../../components/ui/Label";
 import { Icons } from "@/components/ui/Icons";
 import { Input } from "@/components/ui/Input";
 import { buttonVariants } from "@/components/ui/Button";

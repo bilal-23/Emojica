@@ -1,21 +1,87 @@
-import { buttonVariants } from "@/components/UI/Button";
-import { Icons } from "@/components/UI/Icons";
-import { Input } from "@/components/UI/Input";
-import { Label } from "@/components/UI/Label";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 import React, { useState } from "react";
+import { Icons } from "@/components/ui/Icons";
+import InputComponent from "./Register-Input";
+import { buttonVariants } from "@/components/ui/Button";
+import { useValidateRegisterForm } from "@/hooks/use-validate-register-form";
+
+export interface error {
+  message: string;
+  field:
+    | "firstName"
+    | "lastName"
+    | "email"
+    | "username"
+    | "password"
+    | "confirmPassword"
+    | null;
+}
+
+const initialFormData = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  username: "",
+  password: "",
+  confirmPassword: "",
+};
 
 const Register = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(1); //1 First Name, Last Name, 2 Email,  Username, 3 Password,  Confirm Password
-  const [isLoading, setIsLoading] = useState();
-  const [errors, setErrors] = useState({ message: "" });
+  const [formData, setFormData] = useState(initialFormData);
+  const [error, setError] = useState<error>({ message: "", field: null });
+  const { validateForm } = useValidateRegisterForm(setStep, setError);
+
+  const handleInputChange = (
+    value: string,
+    type:
+      | "firstName"
+      | "lastName"
+      | "email"
+      | "username"
+      | "password"
+      | "confirmPassword"
+  ) => {
+    setError({ message: "", field: null });
+    switch (type) {
+      case "firstName":
+        setFormData((p) => ({ ...p, firstName: value }));
+        break;
+      case "lastName":
+        setFormData((p) => ({ ...p, lastName: value }));
+        break;
+      case "email":
+        setFormData((p) => ({ ...p, email: value }));
+        break;
+      case "username":
+        setFormData((p) => ({ ...p, username: value }));
+        break;
+      case "password":
+        setFormData((p) => ({ ...p, password: value }));
+        break;
+      case "confirmPassword":
+        setFormData((p) => ({ ...p, confirmPassword: value }));
+        break;
+      default:
+        break;
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // VALIDATE FORM DATA
+    const isValid = validateForm(formData);
+    if (!isValid) return;
+    // SUBMIT FORM
   };
 
   return (
-    <form onSubmit={handleSubmit} autoComplete="off" className="relative pt-10">
+    <form
+      onSubmit={(e) => e.preventDefault()}
+      autoComplete="off"
+      className="relative pt-10"
+    >
       {step > 1 && (
         <button
           type="button"
@@ -32,100 +98,88 @@ const Register = () => {
         <div className="grid gap-4">
           {step === 1 && (
             <>
-              <Label className="sr-only" htmlFor="firstName">
-                First Name
-              </Label>
-              <Input
+              <InputComponent
+                error={error}
+                handleInputChange={handleInputChange}
                 id="firstName"
-                placeholder="John"
+                isLoading={isLoading}
+                label="First Name"
+                placeholder="First name"
                 type="text"
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect="off"
-                disabled={isLoading}
-                required
+                value={formData.firstName}
               />
-              <Label className="sr-only" htmlFor="lastName">
-                Last Name
-              </Label>
-              <Input
+              <InputComponent
+                error={error}
+                handleInputChange={handleInputChange}
                 id="lastName"
-                placeholder="Doe"
+                isLoading={isLoading}
+                label="Last Name"
+                placeholder="Last name"
                 type="text"
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect="off"
-                disabled={isLoading}
-                required
+                value={formData.lastName}
               />
             </>
           )}
           {step === 2 && (
             <>
-              <Label className="sr-only" htmlFor="email">
-                Email
-              </Label>
-              <Input
+              <InputComponent
+                error={error}
+                handleInputChange={handleInputChange}
                 id="email"
+                isLoading={isLoading}
+                label="Email"
                 placeholder="name@example.com"
                 type="email"
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect="off"
-                disabled={isLoading}
-                required
+                value={formData.email}
               />
-              <Label className="sr-only" htmlFor="username">
-                Username
-              </Label>
-              <Input
+              <InputComponent
+                error={error}
+                handleInputChange={handleInputChange}
                 id="username"
-                placeholder="attackhelicopter42"
+                isLoading={isLoading}
+                label="Username"
+                placeholder="attackhelicopter123"
                 type="text"
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect="off"
-                disabled={isLoading}
-                required
+                value={formData.username}
               />
             </>
           )}
           {step === 3 && (
             <>
-              <Label className="sr-only" htmlFor="password">
-                Password
-              </Label>
-              <Input
+              <InputComponent
+                error={error}
+                handleInputChange={handleInputChange}
                 id="password"
+                isLoading={isLoading}
+                label="Password"
                 placeholder="Password"
                 type="password"
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect="off"
-                disabled={isLoading}
+                value={formData.password}
               />
-              <Label className="sr-only" htmlFor="confirmPassword">
-                Confirm Password
-              </Label>
-              <Input
+              <InputComponent
+                error={error}
+                handleInputChange={handleInputChange}
                 id="confirmPassword"
+                isLoading={isLoading}
+                label="Confirm Password"
                 placeholder="Confirm Password"
                 type="password"
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect="off"
-                aria-autocomplete="none"
-                disabled={isLoading}
+                value={formData.confirmPassword}
               />
             </>
           )}
-          {errors && (
-            <p className="px-1 text-xs text-red-600">{errors?.message}</p>
+          {error && (
+            <p className="px-1 text-xs text-red-600">{error?.message}</p>
           )}
         </div>
         {step === 3 ? (
           <>
-            <button className={cn(buttonVariants())} disabled={isLoading}>
+            <button
+              className={cn(buttonVariants())}
+              disabled={isLoading}
+              type="submit"
+              onClick={handleSubmit}
+            >
               {isLoading && (
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               )}

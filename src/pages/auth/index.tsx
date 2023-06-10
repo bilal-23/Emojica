@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Login from "@/components/Auth/Login";
+import { Icons } from "@/components/ui/Icons";
 import Register from "@/components/Auth/Register";
-import { Icons } from "@/components/UI/Icons";
 
 const Auth: React.FC = () => {
   const [login, setLogin] = useState(true);
@@ -34,9 +34,7 @@ const Auth: React.FC = () => {
             className="hover:text-brand underline underline-offset-4"
             onClick={toggleForm}
           >
-            {login
-              ? "Don&apos;t have an account? Sign Up"
-              : "Already a member?"}
+            {login ? "Don't have an account? Sign Up" : "Already a member?"}
           </button>
         </p>
       </div>

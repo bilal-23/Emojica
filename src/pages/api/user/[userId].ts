@@ -62,7 +62,7 @@ async function getUserById(_id: ObjectId) {
     return await User.find({ _id })
         .populate('following', '_id firstName pic username')
         .populate('followers', '_id firstName pic username')
-    // .populate('bookmarks');
+        .populate('bookmarks');
 }
 
 async function deleteUserById(_id: ObjectId) {

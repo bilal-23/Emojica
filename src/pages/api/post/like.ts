@@ -36,13 +36,13 @@ export default async function handler(
             return res.status(400).json({ message: "Post is already liked" });
         }
 
-        post.likes.likeCount += 1;
         post.likes.likedBy.push(_id);
         // Remove user from dislikedBy array if present
         const index = post.likes.dislikedBy.indexOf(_id);
         if (index > -1) {
             post.likes.dislikedBy.splice(index, 1);
         }
+        post.likes.likeCount = post.likes.likedBy.length;
         await post.save();
 
         return res.status(200).json({ message: "Post liked successfully" });

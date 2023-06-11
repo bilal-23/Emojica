@@ -16,12 +16,12 @@ export default async function handler(
         await connectMongoDB();
         // GET USER ID AND POST ID FROM REQUEST BODY
         const { userId, postId } = req.body;
-        const _id = new ObjectId(userId);
+        const _userId = new ObjectId(userId);
         if (!userId || !postId) {
             return res.status(400).json({ message: "Missing userId or postId" });
         }
         // FIND USER BY ID
-        const user = await User.findOne({ _id });
+        const user = await User.findOne({ _id: _userId });
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -31,21 +31,19 @@ export default async function handler(
             return res.status(404).json({ message: "Post not found" });
         }
         // CHECK IF ALREADY DISLIKED
-        if (post.likes.dislikedBy.includes(_id)) {
+        if (post.likes.dislikedBy.includes(_userId)) {
             return res.status(400).json({ message: "Post is already disliked" });
         }
 
-        // DONT MAKE LIKE COUNT NEGATIVE
-        if (post.likes.likeCount !== 0) {
-            post.likes.likeCount -= 1
-        }
-
-        post.likes.dislikedBy.push(_id);
+        post.likes.dislikedBy.push(_userId);
         // Remove user from likedBy array if present
-        const index = post.likes.likedBy.indexOf(_id);
+        const index = post.likes.likedBy.indexOf(_userId);
         if (index > -1) {
             post.likes.likedBy.splice(index, 1);
         }
+
+        post.likes.likeCount = post.likes.likedBy.length;
+
         await post.save();
 
         return res.status(200).json({ message: "Post disliked successfully" });

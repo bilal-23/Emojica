@@ -1,6 +1,5 @@
 import { ObjectId } from "mongodb";
 import { User } from "@/models/user";
-// import { Post } from "@/models/Post";
 import { connectMongoDB } from "@/lib/mongoConnect";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -62,7 +61,13 @@ async function getUserById(_id: ObjectId) {
     return await User.find({ _id })
         .populate('following', '_id firstName pic username')
         .populate('followers', '_id firstName pic username')
-        .populate('bookmarks');
+        .populate({
+            path: 'bookmarks',
+            populate: {
+                path: 'author',
+                select: '_id firstName pic username'
+            }
+        });
 }
 
 async function deleteUserById(_id: ObjectId) {

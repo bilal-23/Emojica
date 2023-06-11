@@ -3,9 +3,9 @@ import { Post } from "@/models/post";
 import { connectMongoDB } from "@/lib/mongoConnect";
 import { NextApiRequest, NextApiResponse } from "next";
 
-// GET - GET USER BY ID - POPULATE FOLLOWERS, FOLLOWING, AND BOOKMARKS
-// PATCH - UPDATE USER BY ID
-// DELETE - DELETE USER BY ID
+// GET - GET POST BY ID - POPULATE FOLLOWERS, FOLLOWING, AND BOOKMARKS
+// PATCH - UPDATE POST BY ID
+// DELETE - DELETE POST BY ID
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse

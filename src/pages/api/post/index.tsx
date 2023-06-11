@@ -3,7 +3,7 @@ import { connectMongoDB } from "@/lib/mongoConnect";
 import { NextApiRequest, NextApiResponse } from "next";
 import { User } from "@/models/user";
 
-// Get ALL POSTS
+// Get ALL POSTS - POPULATES AUTHOR AND COMMENTS
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -39,10 +39,6 @@ export default async function handler(
       const newPost = new Post({
         content,
         author,
-        likes: {
-          likedBy: ["648576e682701dda36b1e99e"],
-          dislikedBy: ["648576e682701dda36b1e99e"],
-        },
       });
 
       await newPost.save();
@@ -58,8 +54,6 @@ async function getPosts() {
     .populate([
       { path: "author", select: "_id firstName pic username" },
       { path: "comments.user", select: "_id firstName pic username" },
-      { path: "likes.likedBy", select: "_id firstName pic username" },
-      { path: "likes.dislikedBy", select: "_id firstName pic username" },
     ])
     .sort({ createdAt: -1 }); // -1: DESC, 1: ASC
   return posts;

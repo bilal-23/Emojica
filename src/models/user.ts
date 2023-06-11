@@ -1,6 +1,10 @@
 import { Schema, model, Types, models } from 'mongoose';
 
 const userSchema = new Schema({
+    verified: {
+        type: Boolean,
+        default: false
+    },
     firstName: {
         type: String,
         required: true

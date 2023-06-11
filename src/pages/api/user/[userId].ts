@@ -1,9 +1,10 @@
 import { ObjectId } from "mongodb";
 import { User } from "@/models/user";
+// import { Post } from "@/models/Post";
 import { connectMongoDB } from "@/lib/mongoConnect";
 import { NextApiRequest, NextApiResponse } from "next";
 
-// GET - GET USER BY ID
+// GET - GET USER BY ID - POPULATE FOLLOWERS, FOLLOWING, AND BOOKMARKS
 // PATCH - UPDATE USER BY ID
 // DELETE - DELETE USER BY ID
 export default async function handler(
@@ -58,7 +59,10 @@ export default async function handler(
 }
 
 async function getUserById(_id: ObjectId) {
-    return await User.find({ _id });
+    return await User.find({ _id })
+        .populate('following', '_id firstName pic username')
+        .populate('followers', '_id firstName pic username')
+        .populate('bookmarks');
 }
 
 async function deleteUserById(_id: ObjectId) {

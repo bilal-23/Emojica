@@ -20,3 +20,6 @@ export default async function handler(
     return res.status(500).json({ message: "Internal Server Error", error });
   }
 }
+
+
+// This Does Not Populate the Followers, Following, and Bookmarks

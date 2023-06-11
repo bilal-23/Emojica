@@ -1,7 +1,24 @@
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import { commentSchema } from './comment';
 
-const postSchema = new mongoose.Schema({
+interface Post extends Document {
+    author: Types.ObjectId;
+    content: string;
+    likes: {
+        likeCount: number;
+        likedBy: Types.ObjectId[];
+        dislikedBy: Types.ObjectId[];
+    };
+    comments: {
+        user: Types.ObjectId;
+        comment: string;
+        timestamp: Date;
+    }[];
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+const postSchema = new mongoose.Schema<Post>({
     author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, //contains user Id of user who posted this post
     content: { type: String, required: true },
     likes: {

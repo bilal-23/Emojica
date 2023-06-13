@@ -16,11 +16,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Check if the user with email already exists
         const userEmail = await User.findOne({ email });
         if (userEmail) {
-            return res.status(400).json({ message: 'Email linked to different account' });
+            return res.status(400).json({ message: 'Email linked to different account', id: "email" });
         }
         const userUsername = await User.findOne({ username });
         if (userUsername) {
-            return res.status(400).json({ message: 'Username not available' });
+            return res.status(400).json({ message: 'Username not available', id: "username" });
         }
 
         // Create a new user object

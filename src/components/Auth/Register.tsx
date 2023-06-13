@@ -1,9 +1,11 @@
 import { cn } from "@/lib/utils";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Icons } from "@/components/UI/Icons";
 import InputComponent from "./Register-Input";
 import { buttonVariants } from "@/components/UI/Button";
 import { useValidateRegisterForm } from "@/hooks/use-validate-register-form";
+import { useAuth } from "@/hooks/use-auth";
+import { toast } from "../UI/use-toast";
 
 export interface error {
   message: string;
@@ -31,6 +33,7 @@ const Register = () => {
   const [step, setStep] = useState(1); //1 First Name, Last Name, 2 Email,  Username, 3 Password,  Confirm Password
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState<error>({ message: "", field: null });
+  const { signup } = useAuth({ setStep, setError });
   const { validateForm } = useValidateRegisterForm(setStep, setError);
 
   const handleInputChange = (
@@ -74,6 +77,9 @@ const Register = () => {
     const isValid = validateForm(formData);
     if (!isValid) return;
     // SUBMIT FORM
+    setIsLoading(true);
+    await signup(formData);
+    setIsLoading(false);
   };
 
   return (

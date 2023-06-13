@@ -1,4 +1,3 @@
-import { toast } from "@/components/UI/use-toast";
 import { validate } from "@/lib/validate";
 interface error {
     message: string;
@@ -18,71 +17,44 @@ export const useValidateRegisterForm = (setStep: setStep, setError: setError) =>
     const validateForm = (formData: { firstName: string, lastName: string, username: string, email: string, password: string, confirmPassword: string }): Boolean => {
         const isFirstNameValid = validate.name(formData.firstName);
         if (!isFirstNameValid) {
-            toast({
-                title: "Invalid First Name",
-                description: "Please enter a valid first name",
-                variant: "destructive",
-            });
             setStep(1);
             setError(p => {
-                return { ...p, field: "firstName" }
+                return { message: "Please enter a valid first name", field: "firstName" }
             })
             return false;
         }
         const isLastNameValid = validate.name(formData.lastName);
         if (!isLastNameValid) {
-            toast({
-                title: "Invalid Last Name",
-                description: "Please enter a valid last name",
-                variant: "destructive",
-            });
             setStep(1);
             setError(p => {
-                return { ...p, field: "lastName" }
+                return { message: "Please enter a valid last name", field: "lastName" }
             })
             return false;
         }
         // VALIDATE EMAIL
         const isEmailValid = validate.email(formData.email);
         if (!isEmailValid) {
-            toast({
-                title: "Invalid Email",
-                description: "Please enter a valid email",
-                variant: "destructive",
-            });
             setStep(2);
             setError(p => {
-                return { ...p, field: "email" }
+                return { message: "Please enter a valid email", field: "email" }
             })
             return false;
         }
         // VALIDATE USERNAME
         const isUsernameValid = validate.username(formData.username);
         if (!isUsernameValid) {
-            toast({
-                title: "Invalid Username",
-                description:
-                    "Username must be at least 3 characters long, have no spaces, and no special characters",
-                variant: "destructive",
-            });
             setStep(2);
             setError(p => {
-                return { ...p, field: "username" }
+                return { message: "Username must be at least 3 characters long, have no spaces, and have no special characters", field: "username" }
             })
             return false;
         }
         // VALIDATE PASSWORD
         const isPasswordValid = validate.password(formData.password);
         if (!isPasswordValid) {
-            toast({
-                title: "Invalid Password",
-                description:
-                    "Password must be at least 8 characters long, have at least one numeric digit",
-                variant: "destructive",
-            });
             setStep(3);
             setError(p => {
-                return { ...p, field: "password" }
+                return { message: "Password must be at least 8 characters long, have at least one numeric digit", field: "password" }
             })
             return false;
         }
@@ -90,14 +62,9 @@ export const useValidateRegisterForm = (setStep: setStep, setError: setError) =>
         const isConfirmPasswordValid =
             formData.password === formData.confirmPassword;
         if (!isConfirmPasswordValid) {
-            toast({
-                title: "Invalid Password",
-                description: "Passwords do not match",
-                variant: "destructive",
-            });
             setStep(3);
             setError(p => {
-                return { ...p, field: "confirmPassword" }
+                return { message: "Passwords do not match", field: "confirmPassword" }
             })
             return false;
         }

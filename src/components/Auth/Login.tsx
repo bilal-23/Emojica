@@ -7,6 +7,8 @@ import { buttonVariants } from "@/components/UI/Button";
 import { validate } from "@/lib/validate";
 import { toast } from "../UI/use-toast";
 import { Label } from "../UI/Label";
+import { useAuth } from "@/hooks/use-auth";
+import { useSession } from "next-auth/react";
 
 export const metadata: Metadata = {
   title: "Login",
@@ -20,8 +22,10 @@ const initialFormData = {
 
 export default function Login() {
   const [formData, setFormData] = useState(initialFormData);
-  const [isLoading, setIsLoading] = useState();
-  const [errors, setErrors] = useState({ message: "" });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState({ message: "" });
+  const { login } = useAuth({ setError });
+  const session = useSession();
 
   const handleInputChange = (value: string, field: "password" | "email") => {
     if (field === "password") {
@@ -56,6 +60,9 @@ export default function Login() {
 
     // EMAIL AND PASSWORD ARE VALID
     // SIGN IN
+    setIsLoading(true);
+    // await login(formData.email, formData.password);
+    setIsLoading(false);
   };
 
   return (
@@ -92,11 +99,16 @@ export default function Login() {
             value={formData.password}
             onChange={(e) => handleInputChange(e.target.value, "password")}
           />
-          {errors && (
-            <p className="px-1 text-xs text-red-600">{errors?.message}</p>
+          {error && (
+            <p className="px-1 text-xs text-red-600">{error?.message}</p>
           )}
         </div>
-        <button className={cn(buttonVariants())} disabled={isLoading}>
+        <button
+          className={cn(buttonVariants())}
+          disabled={isLoading}
+          type="button"
+          onClick={login}
+        >
           {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
           Sign In with Email
         </button>

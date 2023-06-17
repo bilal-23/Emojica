@@ -2,6 +2,8 @@ import axios from "axios";
 import { toast } from "@/components/UI/use-toast";
 import { hashPassword } from "@/lib/hashPassword";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
+import { signOut } from "next-auth/react"
 
 interface SignUpData {
     firstName: string;
@@ -16,17 +18,41 @@ interface Auth {
     setError?: any
 }
 export const useAuth = ({ setStep, setError }: Auth) => {
-
-    const login = async () => {
+    const router = useRouter();
+    const login = async ({ email, password }: { email: string, password: string }) => {
+        const result = await signIn("credentials", {
+            redirect: false,
+            email,
+            password,
+            callbackUrl: "/"
+        })
+        if (result?.error) {
+            toast({
+                title: "Login Failed",
+                description: result.error,
+                variant: "destructive"
+            })
+        } else {
+            toast({
+                title: "Login Success",
+                variant: "default",
+            });
+            router.replace('/');
+        }
     }
 
     const logout = async () => {
-
+        signOut({ redirect: false, callbackUrl: "/auth" });
+        router.replace('/auth');
+        toast({
+            title: "Logout Success",
+            variant: "default",
+        });
     }
 
     const signup = async (formData: SignUpData) => {
         if (!setStep) return;
-        if (setError) return;
+        if (!setError) return;
         const hashedPassword = await hashPassword(formData.password);
         try {
             const response = await axios.post("/api/auth/register", { ...formData, password: hashedPassword });
@@ -35,7 +61,7 @@ export const useAuth = ({ setStep, setError }: Auth) => {
                     title: "Account Created",
                     description: "Your account has been created successfully",
                     variant: "default",
-                })
+                });
             }
         }
         catch (err: any) {
@@ -57,3 +83,5 @@ export const useAuth = ({ setStep, setError }: Auth) => {
         signup
     }
 }
+
+

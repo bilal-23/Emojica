@@ -1,14 +1,19 @@
 import { cn } from "@/lib/utils";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Login from "@/components/Auth/Login";
 import { Icons } from "@/components/UI/Icons";
 import Register from "@/components/Auth/Register";
+import { useSession } from "next-auth/react";
+import { GetServerSideProps } from "next";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 const Auth: React.FC = () => {
+  const session = useSession();
+  console.log(session);
   const [login, setLogin] = useState(true);
 
   const toggleForm = () => {
-    console.log("workgin");
     setLogin((p) => !p);
   };
 
@@ -43,3 +48,22 @@ const Auth: React.FC = () => {
 };
 
 export default Auth;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  if (session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      session,
+    },
+  };
+};

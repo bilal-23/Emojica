@@ -8,7 +8,6 @@ import { validate } from "@/lib/validate";
 import { toast } from "../UI/use-toast";
 import { Label } from "../UI/Label";
 import { useAuth } from "@/hooks/use-auth";
-import { useSession } from "next-auth/react";
 
 export const metadata: Metadata = {
   title: "Login",
@@ -25,7 +24,6 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState({ message: "" });
   const { login } = useAuth({ setError });
-  const session = useSession();
 
   const handleInputChange = (value: string, field: "password" | "email") => {
     if (field === "password") {
@@ -61,7 +59,7 @@ export default function Login() {
     // EMAIL AND PASSWORD ARE VALID
     // SIGN IN
     setIsLoading(true);
-    // await login(formData.email, formData.password);
+    await login({ email: formData.email, password: formData.password });
     setIsLoading(false);
   };
 
@@ -107,7 +105,7 @@ export default function Login() {
           className={cn(buttonVariants())}
           disabled={isLoading}
           type="button"
-          onClick={login}
+          onClick={handleSubmit}
         >
           {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
           Sign In with Email

@@ -1,6 +1,5 @@
 const validatePassword = (password: string): boolean => {
     // Regular expression pattern for password validation and one spceical character
-    console.log(password)
     if (password.length < 8) return false;
 
     const alphabets = /[a-zA-Z]/;

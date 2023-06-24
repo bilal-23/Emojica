@@ -24,9 +24,9 @@ import { toast } from "react-toastify";
 const Navbar: React.FC = () => {
   const router = useRouter();
   const handleLogout = async () => {
-    signOut();
+    await signOut();
     router.push("/auth");
-    toast.success("Logged out successfully");
+    toast.success("Logged out successfully", { toastId: "logout" });
   };
   return (
     <nav className="bg-white shadow lg:px-48 border-b border-gray-400 sticky top-0">
@@ -121,6 +121,7 @@ const Navbar: React.FC = () => {
                   >
                     Log Out{" "}
                     <FontAwesomeIcon
+                      onClick={handleLogout}
                       icon={faRightFromBracket}
                       style={{ width: "15px", height: "15px" }}
                     />

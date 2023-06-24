@@ -123,7 +123,10 @@ export default function Login() {
             type="button"
             onClick={async () => {
               setIsLoading(true);
-              await login({ email: "bilal@bilal.com", password: "Bilal@1234" });
+              await login({
+                email: "johnwick@continental.com",
+                password: "JohnWick@123",
+              });
               setIsLoading(false);
             }}
           >

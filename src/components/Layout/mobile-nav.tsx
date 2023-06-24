@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 const MobileNav = () => {
   const router = useRouter();
   const handleLogout = async () => {
-    signOut();
+    await signOut();
     router.push("/auth");
     toast.success("Logged out successfully");
   };

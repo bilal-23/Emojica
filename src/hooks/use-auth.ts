@@ -1,9 +1,9 @@
 import axios from "axios";
-import { toast } from "@/components/UI/use-toast";
+import { toast as shadcnToast } from "@/components/UI/use-toast";
 import { hashPassword } from "@/lib/hashPassword";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { signOut } from "next-auth/react"
+import { toast } from "react-toastify";
 
 interface SignUpData {
     firstName: string;
@@ -19,6 +19,8 @@ interface Auth {
 }
 export const useAuth = ({ setStep, setError }: Auth) => {
     const router = useRouter();
+
+
     const login = async ({ email, password }: { email: string, password: string }) => {
         const result = await signIn("credentials", {
             redirect: false,
@@ -27,28 +29,18 @@ export const useAuth = ({ setStep, setError }: Auth) => {
             callbackUrl: "/"
         })
         if (result?.error) {
-            toast({
+            toast.error
+            shadcnToast({
                 title: "Login Failed",
                 description: result.error,
                 variant: "destructive"
             })
         } else {
-            toast({
-                title: "Login Success",
-                variant: "default",
-            });
+            toast.success("Login Successful");
             router.replace('/');
         }
     }
 
-    const logout = async () => {
-        signOut({ redirect: false, callbackUrl: "/auth" });
-        router.replace('/auth');
-        toast({
-            title: "Logout Success",
-            variant: "default",
-        });
-    }
 
     const signup = async (formData: SignUpData) => {
         if (!setStep) return;
@@ -57,7 +49,7 @@ export const useAuth = ({ setStep, setError }: Auth) => {
         try {
             const response = await axios.post("/api/auth/register", { ...formData, password: hashedPassword });
             if (response.status === 201) {
-                toast({
+                shadcnToast({
                     title: "Account Created",
                     description: "Your account has been created successfully",
                     variant: "default",
@@ -79,7 +71,6 @@ export const useAuth = ({ setStep, setError }: Auth) => {
 
     return {
         login,
-        logout,
         signup
     }
 }

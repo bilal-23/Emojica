@@ -7,6 +7,7 @@ import { useValidateRegisterForm } from "@/hooks/use-validate-register-form";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "../UI/use-toast";
 import Login from "./Login";
+import Head from "next/head";
 
 export interface error {
   message: string;
@@ -87,132 +88,137 @@ const Register = () => {
   };
 
   return (
-    <form
-      onSubmit={(e) => e.preventDefault()}
-      autoComplete="off"
-      className="relative pt-10"
-    >
-      {step > 1 && (
-        <button
-          type="button"
-          onClick={() => setStep(step - 1)}
-          className={cn(
-            buttonVariants({ variant: "ghost" }),
-            "absolute left-0 top-0 px-1 py-0 hover:bg-transparent"
-          )}
-        >
-          <Icons.chevronLeft className="h-4 w-4" />
-        </button>
-      )}
-      <div className="grid gap-2">
-        <div className="grid gap-4">
-          {step === 1 && (
+    <>
+      <Head>
+        <title>Emojica | Register</title>
+      </Head>
+      <form
+        onSubmit={(e) => e.preventDefault()}
+        autoComplete="off"
+        className="relative pt-10"
+      >
+        {step > 1 && (
+          <button
+            type="button"
+            onClick={() => setStep(step - 1)}
+            className={cn(
+              buttonVariants({ variant: "ghost" }),
+              "absolute left-0 top-0 px-1 py-0 hover:bg-transparent"
+            )}
+          >
+            <Icons.chevronLeft className="h-4 w-4" />
+          </button>
+        )}
+        <div className="grid gap-2">
+          <div className="grid gap-4">
+            {step === 1 && (
+              <>
+                <InputComponent
+                  error={error}
+                  handleInputChange={handleInputChange}
+                  id="firstName"
+                  isLoading={isLoading}
+                  label="First Name"
+                  placeholder="First name"
+                  type="text"
+                  value={formData.firstName}
+                />
+                <InputComponent
+                  error={error}
+                  handleInputChange={handleInputChange}
+                  id="lastName"
+                  isLoading={isLoading}
+                  label="Last Name"
+                  placeholder="Last name"
+                  type="text"
+                  value={formData.lastName}
+                />
+              </>
+            )}
+            {step === 2 && (
+              <>
+                <InputComponent
+                  error={error}
+                  handleInputChange={handleInputChange}
+                  id="email"
+                  isLoading={isLoading}
+                  label="Email"
+                  placeholder="name@example.com"
+                  type="email"
+                  value={formData.email}
+                />
+                <InputComponent
+                  error={error}
+                  handleInputChange={handleInputChange}
+                  id="username"
+                  isLoading={isLoading}
+                  label="Username"
+                  placeholder="attackhelicopter123"
+                  type="text"
+                  value={formData.username}
+                />
+              </>
+            )}
+            {step === 3 && (
+              <>
+                <InputComponent
+                  error={error}
+                  handleInputChange={handleInputChange}
+                  id="password"
+                  isLoading={isLoading}
+                  label="Password"
+                  placeholder="Password"
+                  type="password"
+                  value={formData.password}
+                />
+                <InputComponent
+                  error={error}
+                  handleInputChange={handleInputChange}
+                  id="confirmPassword"
+                  isLoading={isLoading}
+                  label="Confirm Password"
+                  placeholder="Confirm Password"
+                  type="password"
+                  value={formData.confirmPassword}
+                />
+              </>
+            )}
+            {error && (
+              <p className="px-1 text-xs text-red-600">{error?.message}</p>
+            )}
+          </div>
+          {step === 3 ? (
             <>
-              <InputComponent
-                error={error}
-                handleInputChange={handleInputChange}
-                id="firstName"
-                isLoading={isLoading}
-                label="First Name"
-                placeholder="First name"
-                type="text"
-                value={formData.firstName}
-              />
-              <InputComponent
-                error={error}
-                handleInputChange={handleInputChange}
-                id="lastName"
-                isLoading={isLoading}
-                label="Last Name"
-                placeholder="Last name"
-                type="text"
-                value={formData.lastName}
-              />
+              <button
+                className={cn(buttonVariants())}
+                disabled={isLoading}
+                type="submit"
+                onClick={handleSubmit}
+              >
+                {isLoading && (
+                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Register
+              </button>
             </>
-          )}
-          {step === 2 && (
+          ) : (
             <>
-              <InputComponent
-                error={error}
-                handleInputChange={handleInputChange}
-                id="email"
-                isLoading={isLoading}
-                label="Email"
-                placeholder="name@example.com"
-                type="email"
-                value={formData.email}
-              />
-              <InputComponent
-                error={error}
-                handleInputChange={handleInputChange}
-                id="username"
-                isLoading={isLoading}
-                label="Username"
-                placeholder="attackhelicopter123"
-                type="text"
-                value={formData.username}
-              />
+              <button
+                className={cn(buttonVariants())}
+                disabled={isLoading}
+                type="button"
+                onClick={() => setStep(step + 1)}
+              >
+                {isLoading && (
+                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Next
+              </button>
             </>
-          )}
-          {step === 3 && (
-            <>
-              <InputComponent
-                error={error}
-                handleInputChange={handleInputChange}
-                id="password"
-                isLoading={isLoading}
-                label="Password"
-                placeholder="Password"
-                type="password"
-                value={formData.password}
-              />
-              <InputComponent
-                error={error}
-                handleInputChange={handleInputChange}
-                id="confirmPassword"
-                isLoading={isLoading}
-                label="Confirm Password"
-                placeholder="Confirm Password"
-                type="password"
-                value={formData.confirmPassword}
-              />
-            </>
-          )}
-          {error && (
-            <p className="px-1 text-xs text-red-600">{error?.message}</p>
           )}
         </div>
-        {step === 3 ? (
-          <>
-            <button
-              className={cn(buttonVariants())}
-              disabled={isLoading}
-              type="submit"
-              onClick={handleSubmit}
-            >
-              {isLoading && (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              Register
-            </button>
-          </>
-        ) : (
-          <>
-            <button
-              className={cn(buttonVariants())}
-              disabled={isLoading}
-              type="button"
-              onClick={() => setStep(step + 1)}
-            >
-              {isLoading && (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              Next
-            </button>
-          </>
-        )}
-      </div>
-    </form>
+      </form>
+    </>
   );
 };
 

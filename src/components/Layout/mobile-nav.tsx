@@ -6,11 +6,18 @@ import {
   faBookmark,
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from "next/router";
+import { signOut } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/UI/avatar";
-import { useAuth } from "@/hooks/use-auth";
+import { toast } from "react-toastify";
 
 const MobileNav = () => {
-  const { logout } = useAuth({});
+  const router = useRouter();
+  const handleLogout = async () => {
+    signOut();
+    router.push("/auth");
+    toast.success("Logged out successfully");
+  };
   return (
     <nav className="flex sm:hidden bg-white shadow lg:px-48 border-t border-gray-400 sticky bottom-0">
       <div className="w-full px-5">
@@ -52,7 +59,7 @@ const MobileNav = () => {
           <button
             className="flex-shrink-0 p-1 border-transparent text-gray-700 rounded-full hover:text-gray-600 focus:outline-none focus:text-gray-600 transition duration-150 ease-in-out"
             aria-label="Notifications"
-            onClick={logout}
+            onClick={handleLogout}
           >
             <FontAwesomeIcon
               icon={faRightFromBracket}

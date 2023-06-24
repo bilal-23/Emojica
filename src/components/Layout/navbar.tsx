@@ -17,10 +17,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/UI/dropdown-menu";
-import { useAuth } from "@/hooks/use-auth";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 const Navbar: React.FC = () => {
-  const { logout } = useAuth({});
+  const router = useRouter();
+  const handleLogout = async () => {
+    signOut();
+    router.push("/auth");
+    toast.success("Logged out successfully");
+  };
   return (
     <nav className="bg-white shadow lg:px-48 border-b border-gray-400 sticky top-0">
       <div className="max-w-7xl mx-auto px-2 md:px-4 lg:px-8">
@@ -110,7 +117,7 @@ const Navbar: React.FC = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     className="flex justify-between cursor-pointer"
-                    onClick={logout}
+                    onClick={handleLogout}
                   >
                     Log Out{" "}
                     <FontAwesomeIcon

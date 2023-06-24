@@ -1,12 +1,18 @@
 import { GetServerSideProps } from "next";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
+import Head from "next/head";
 
 export default function Home() {
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24`}
-    ></main>
+    <>
+      <Head>
+        <title>Emojica | Home</title>
+      </Head>
+      <main
+        className={`flex min-h-screen flex-col items-center justify-between p-24`}
+      ></main>
+    </>
   );
 }
 

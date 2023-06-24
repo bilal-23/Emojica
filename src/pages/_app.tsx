@@ -3,9 +3,10 @@ import NProgress from "nprogress";
 import Layout from "@/components/Layout";
 import type { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
+import "react-toastify/dist/ReactToastify.css";
 import { Toaster } from "@/components/UI/toaster";
 import Head from "next/head";
-import Router from "next/router";
+import { ToastContainer, Slide } from "react-toastify";
 
 export default function App({
   Component,
@@ -20,8 +21,25 @@ export default function App({
         <Layout>
           <Component {...pageProps} />
           <Toaster />
+          <ReactToaster />
         </Layout>
       </SessionProvider>
     </>
+  );
+}
+
+function ReactToaster() {
+  return (
+    <ToastContainer
+      transition={Slide}
+      position="top-right"
+      autoClose={1000}
+      hideProgressBar={true}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      className={"toast-container"}
+      limit={3}
+    />
   );
 }

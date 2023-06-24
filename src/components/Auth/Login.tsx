@@ -8,6 +8,7 @@ import { validate } from "@/lib/validate";
 import { toast } from "../UI/use-toast";
 import { Label } from "../UI/Label";
 import { useAuth } from "@/hooks/use-auth";
+import Head from "next/head";
 
 export const metadata: Metadata = {
   title: "Login",
@@ -64,54 +65,76 @@ export default function Login() {
   };
 
   return (
-    <form onSubmit={handleSubmit} autoComplete="off" className="pt-10">
-      <div className="grid gap-2">
-        <div className="grid gap-4">
-          <Label className="sr-only" htmlFor="email">
-            Name
-          </Label>
-          <Input
-            id="email"
-            placeholder="name@example.com"
-            type="email"
-            autoCapitalize="none"
-            autoComplete="off"
-            autoCorrect="off"
+    <>
+      <Head>
+        <title>Emojica | Login</title>
+      </Head>
+      <form onSubmit={handleSubmit} autoComplete="off" className="pt-10">
+        <div className="grid gap-2">
+          <div className="grid gap-4">
+            <Label className="sr-only" htmlFor="email">
+              Name
+            </Label>
+            <Input
+              id="email"
+              placeholder="name@example.com"
+              type="email"
+              autoCapitalize="none"
+              autoComplete="off"
+              autoCorrect="off"
+              disabled={isLoading}
+              required
+              value={formData.email}
+              onChange={(e) => handleInputChange(e.target.value, "email")}
+            />
+            <Label className="sr-only" htmlFor="password">
+              Password
+            </Label>
+            <Input
+              id="password"
+              placeholder="******"
+              type="password"
+              autoCapitalize="none"
+              autoComplete="off"
+              autoCorrect="off"
+              disabled={isLoading}
+              required
+              value={formData.password}
+              onChange={(e) => handleInputChange(e.target.value, "password")}
+            />
+            {error && (
+              <p className="px-1 text-xs text-red-600">{error?.message}</p>
+            )}
+          </div>
+          <button
+            className={cn(buttonVariants())}
             disabled={isLoading}
-            required
-            value={formData.email}
-            onChange={(e) => handleInputChange(e.target.value, "email")}
-          />
-          <Label className="sr-only" htmlFor="password">
-            Password
-          </Label>
-          <Input
-            id="password"
-            placeholder="******"
-            type="password"
-            autoCapitalize="none"
-            autoComplete="off"
-            autoCorrect="off"
+            type="button"
+            onClick={handleSubmit}
+          >
+            {isLoading && (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Sign In with Email
+          </button>
+          <button
+            className={cn(buttonVariants())}
             disabled={isLoading}
-            required
-            value={formData.password}
-            onChange={(e) => handleInputChange(e.target.value, "password")}
-          />
-          {error && (
-            <p className="px-1 text-xs text-red-600">{error?.message}</p>
-          )}
+            type="button"
+            onClick={async () => {
+              setIsLoading(true);
+              await login({ email: "bilal@bilal.com", password: "Bilal@1234" });
+              setIsLoading(false);
+            }}
+          >
+            {isLoading && (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Guest Login
+          </button>
         </div>
-        <button
-          className={cn(buttonVariants())}
-          disabled={isLoading}
-          type="button"
-          onClick={handleSubmit}
-        >
-          {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-          Sign In with Email
-        </button>
-      </div>
-    </form>
+      </form>
+    </>
   );
 }
 

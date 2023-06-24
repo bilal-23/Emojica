@@ -4,6 +4,7 @@ import { fontSans } from "@/lib/font";
 import Navbar from "./navbar";
 import { useRouter } from "next/router";
 import MobileNav from "./mobile-nav";
+import { useSession } from "next-auth/react";
 
 interface Props {
   children: React.ReactNode;

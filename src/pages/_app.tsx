@@ -7,22 +7,41 @@ import "react-toastify/dist/ReactToastify.css";
 import { Toaster } from "@/components/UI/toaster";
 import Head from "next/head";
 import { ToastContainer, Slide } from "react-toastify";
+import { useState } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export default function App({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps) {
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+            refetchOnMount: false,
+            refetchOnReconnect: true,
+            retry: 3,
+            refetchInterval: 5 * 60 * 1000, //5 minutes
+          },
+        },
+      })
+  );
+
   return (
     <>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <SessionProvider session={session}>
-        <Layout>
-          <Component {...pageProps} />
-          <Toaster />
-          <ReactToaster />
-        </Layout>
+        <QueryClientProvider client={queryClient}>
+          <Layout>
+            <Component {...pageProps} />
+            <Toaster />
+            <ReactToaster />
+          </Layout>
+        </QueryClientProvider>
       </SessionProvider>
     </>
   );

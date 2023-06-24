@@ -10,8 +10,14 @@ import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/UI/avatar";
 import { toast } from "react-toastify";
+import { useGetProfileQuery } from "@/queries/profileQueries";
 
 const MobileNav = () => {
+  const { isLoading, data } = useGetProfileQuery();
+  // Merge first name and last name first letter
+  const name =
+    data && data?.firstName.split("")[0] + data?.lastName.split("")[0];
+
   const router = useRouter();
   const handleLogout = async () => {
     await signOut();
@@ -52,8 +58,8 @@ const MobileNav = () => {
           </button>
           <div className="ml-2 relative flex items-center ">
             <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarImage src={data?.pic} />
+              <AvatarFallback>{name}</AvatarFallback>
             </Avatar>
           </div>
           <button

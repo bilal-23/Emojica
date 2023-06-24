@@ -20,8 +20,12 @@ import {
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import { useGetProfileQuery } from "@/queries/profileQueries";
 
 const Navbar: React.FC = () => {
+  const { isLoading, data } = useGetProfileQuery();
+  const name =
+    data && data?.firstName.split("")[0] + data?.lastName.split("")[0];
   const router = useRouter();
   const handleLogout = async () => {
     await signOut();
@@ -29,7 +33,7 @@ const Navbar: React.FC = () => {
     toast.success("Logged out successfully", { toastId: "logout" });
   };
   return (
-    <nav className="bg-white shadow lg:px-48 border-b border-gray-400 sticky top-0">
+    <nav className="bg-white shadow lg:px-48 border-b  sticky top-0 z-10">
       <div className="max-w-7xl mx-auto px-2 md:px-4 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex px-2 lg:px-0">
@@ -51,9 +55,9 @@ const Navbar: React.FC = () => {
                     viewBox="0 0 20 20"
                   >
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     />
                   </svg>
                 </div>
@@ -94,8 +98,8 @@ const Navbar: React.FC = () => {
                   style={{ border: "none", outline: "none" }}
                 >
                   <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
+                    <AvatarImage src={data?.pic} />
+                    <AvatarFallback>{name}</AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>

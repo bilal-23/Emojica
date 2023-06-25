@@ -19,7 +19,7 @@ const Layout: React.FC<Props> = ({ children }) => {
       {router.pathname === "/auth" ? null : <Navbar />}
       <div
         className={cn(
-          "min-h-screen bg-background font-sans antialiased max-w-7xl mx-auto my-0",
+          "min-h-screen bg-[#edf2f7] font-sans antialiased max-w-7xl mx-auto my-0",
           fontSans.variable
         )}
       >

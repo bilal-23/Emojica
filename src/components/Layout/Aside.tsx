@@ -4,7 +4,7 @@ import React from "react";
 const Aside = () => {
   return (
     <aside
-      className="z-101 hidden w-80 md:block flex-shrink-0 py-8
+      className="z-101 hidden w-80 md:block flex-shrink-1 py-8
       sticky top-[70px] h-max
     "
     >

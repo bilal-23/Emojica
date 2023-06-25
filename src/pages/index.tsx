@@ -22,7 +22,7 @@ export default function Home() {
         lg:yp-24 py-0  bg-[#edf2f7] z-100 gap-4 `}
       >
         <Aside />
-        <div className="py-10">
+        <div className="py-10  px-2">
           <CreatePost />
           <Feed />
         </div>

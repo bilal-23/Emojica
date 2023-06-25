@@ -11,6 +11,7 @@ import { signOut } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/UI/avatar";
 import { toast } from "react-toastify";
 import { useGetProfileQuery } from "@/queries/profileQueries";
+import Link from "next/link";
 
 const MobileNav = () => {
   const { isLoading, data } = useGetProfileQuery();
@@ -19,13 +20,14 @@ const MobileNav = () => {
     data && data?.firstName.split("")[0] + data?.lastName.split("")[0];
 
   const router = useRouter();
+  const { pathname } = router;
   const handleLogout = async () => {
     await signOut();
     router.push("/auth");
     toast.success("Logged out successfully");
   };
   return (
-    <nav className="flex sm:hidden  bg-gray-100 shadow lg:px-48 border-t sticky bottom-0">
+    <nav className="flex md:hidden  bg-gray-100 shadow lg:px-48 border-t sticky bottom-0 pb-0.5">
       <div className="w-full px-5">
         <div className="flex justify-between h-16">
           <button
@@ -56,12 +58,16 @@ const MobileNav = () => {
               style={{ width: "25px", height: "25px" }}
             />
           </button>
-          <div className="ml-2 relative flex items-center ">
+          <Link
+            href="/profile"
+            className={`ml-2 relative flex items-center border-b-2
+           ${pathname === "/profile" && "border-indigo-500"}`}
+          >
             <Avatar className="shadow-inner border-2">
               <AvatarImage src={data?.pic} />
               <AvatarFallback>{name}</AvatarFallback>
             </Avatar>
-          </div>
+          </Link>
           <button
             className="flex-shrink-0 p-1 border-transparent text-gray-700 rounded-full hover:text-gray-600 focus:outline-none focus:text-gray-600 transition duration-150 ease-in-out"
             aria-label="Notifications"

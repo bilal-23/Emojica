@@ -17,16 +17,11 @@ export default function Home() {
       <Head>
         <title>Emojica | Home</title>
       </Head>
-      <main
-        className={`flex justify-between 
-        lg:yp-24 py-0  bg-[#edf2f7] z-100 gap-4 `}
-      >
-        <Aside />
-        <div className="py-10  px-2">
+      <main>
+        <div className="py-10 pt-6  px-2">
           <CreatePost />
           <Feed />
         </div>
-        <UserSuggestions />
       </main>
     </>
   );

@@ -1,12 +1,15 @@
 import React from "react";
+import { ScrollArea } from "@/components/UI/scroll";
 
 const UserSuggestions = () => {
   return (
-    <div className="hidden md:block lg:block py-8 h-max sticky top-[70px] mr-2">
-      <div className="w-[18rem] rounded-lg shadow border py-2 flex-shrink-1">
-        <header className="font-bold text-2xl px-5 py-4">Who to follow</header>
+    <div className="hidden md:block lg:block py-8 pt-4 h-max sticky top-[70px] mr-2 ">
+      <div className="w-[15rem] lg:w-[18rem] rounded-lg shadow border py-2 flex-shrink-1 bg-white">
+        <header className="font-bold text-2xl px-2 lg:px-5 py-4 border-b">
+          Who to follow
+        </header>
 
-        <main className="px-5">
+        <main className="pt-2 px-2 lg:px-5">
           <div className="grid grid-cols-6">
             <div className="">
               <img

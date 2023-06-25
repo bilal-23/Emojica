@@ -33,7 +33,7 @@ const Navbar: React.FC = () => {
     toast.success("Logged out successfully", { toastId: "logout" });
   };
   return (
-    <nav className="bg-white shadow lg:px-48 border-b  sticky top-0 z-10">
+    <nav className="bg-gray-100 shadow lg:px-48 border-b  sticky top-0 z-10">
       <div className="max-w-7xl mx-auto px-2 md:px-4 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex px-2 lg:px-0">
@@ -72,32 +72,12 @@ const Navbar: React.FC = () => {
           </div>
 
           <div className="hidden sm:flex lg:ml-4 lg:flex lg:items-center">
-            <button
-              className="flex-shrink-0 p-1 border-transparent text-gray-700 rounded-full hover:text-gray-600 focus:outline-none focus:text-gray-600 transition duration-150 ease-in-out"
-              aria-label="Notifications"
-            >
-              <FontAwesomeIcon
-                icon={faCompass}
-                style={{ width: "25px", height: "25px" }}
-              />
-            </button>
-
-            <button
-              className="flex-shrink-0 p-1 border-transparent text-gray-700 rounded-full hover:text-gray-600 focus:outline-none focus:text-gray-600 transition duration-150 ease-in-out"
-              aria-label="Notifications"
-            >
-              <FontAwesomeIcon
-                icon={faHouse}
-                style={{ width: "25px", height: "25px" }}
-              />
-            </button>
-
             <div className="ml-2 relative flex items-center ">
               <DropdownMenu>
                 <DropdownMenuTrigger
                   style={{ border: "none", outline: "none" }}
                 >
-                  <Avatar>
+                  <Avatar className="shadow-inner border-2">
                     <AvatarImage src={data?.pic} />
                     <AvatarFallback>{name}</AvatarFallback>
                   </Avatar>

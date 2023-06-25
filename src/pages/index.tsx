@@ -5,6 +5,8 @@ import Head from "next/head";
 import { useGetAllUserQuery } from "@/queries/userQueries";
 import Feed from "@/components/Homepage/feed";
 import CreatePost from "@/components/Post/create-post";
+import Aside from "@/components/Layout/Aside";
+import UserSuggestions from "@/components/Homepage/user-suggestions";
 
 export default function Home() {
   const { isLoading, isError, data } = useGetAllUserQuery();
@@ -16,11 +18,15 @@ export default function Home() {
         <title>Emojica | Home</title>
       </Head>
       <main
-        className={`flex min-h-screen flex-col items-center justify-between 
-        lg:yp-24 py-0`}
+        className={`flex min-h-screen justify-between 
+        lg:yp-24 py-0 relative bg-[#edf2f7] z-100 gap-4`}
       >
-        <CreatePost />
-        <Feed />
+        <Aside />
+        <div className="py-10">
+          <CreatePost />
+          <Feed />
+        </div>
+        <UserSuggestions />
       </main>
     </>
   );

@@ -25,7 +25,7 @@ const MobileNav = () => {
     toast.success("Logged out successfully");
   };
   return (
-    <nav className="flex sm:hidden bg-white shadow lg:px-48 border-t border-gray-400 sticky bottom-0">
+    <nav className="flex sm:hidden  bg-gray-100 shadow lg:px-48 border-t sticky bottom-0">
       <div className="w-full px-5">
         <div className="flex justify-between h-16">
           <button
@@ -57,7 +57,7 @@ const MobileNav = () => {
             />
           </button>
           <div className="ml-2 relative flex items-center ">
-            <Avatar>
+            <Avatar className="shadow-inner border-2">
               <AvatarImage src={data?.pic} />
               <AvatarFallback>{name}</AvatarFallback>
             </Avatar>

@@ -75,7 +75,8 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background-color: #edf2f7;
     font-feature-settings: "rlig" 1, "calt" 1;
     overflow-x: hidden;
   }

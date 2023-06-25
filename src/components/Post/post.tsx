@@ -1,50 +1,124 @@
 import React from "react";
+import { Avatar } from "../UI/avatar";
+import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 
 const Post = () => {
   return (
-    <div className="bg-[var(--background)] xs:w-[28rem] w-full border border-y-0">
-      <div className="bg-[var(--background)]  rounded-sm w-full">
-        <div className="flex items-center px-4 py-3">
-          <img
-            className="h-8 w-8 rounded-full"
-            src="https://picsum.photos/id/1027/150/150"
-          />
-          <div className="ml-3 ">
-            <span className="text-sm font-semibold antialiased block leading-tight">
-              8fact
-            </span>
-            <span className="text-gray-600 text-xs block">
-              Asheville, North Carolina
-            </span>
+    <div className="bg-white shadow rounded-lg mt-10">
+      <div className="flex flex-row px-2 py-3 mx-3">
+        <Avatar className=" border-2 border-green-500 w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center ">
+          <AvatarImage src="/" />
+          <AvatarFallback>BM</AvatarFallback>
+        </Avatar>
+        <div className="flex flex-col mb-2 ml-4 mt-1">
+          <div className="text-gray-600 text-sm font-semibold">Sara Lauren</div>
+          <div className="flex w-full mt-1">
+            <div className="text-blue-700 font-base text-xs mr-1 cursor-pointer">
+              UX Design
+            </div>
+            <div className="text-gray-400 font-thin text-xs">• 1 day ago</div>
           </div>
         </div>
-        <div className="content   rounded">
-          <p className="px-4 py-5 font-normal text-lg">This is a post</p>
-          <img src="https://picsum.photos/id/244/900/900" />
-        </div>
-        <div className="flex items-center justify-between mx-4 mt-3 mb-2">
-          <div className="flex gap-5">
-            <svg fill="#262626" height="24" viewBox="0 0 48 48" width="24">
-              <path d="M34.6 6.1c5.7 0 10.4 5.2 10.4 11.5 0 6.8-5.9 11-11.5 16S25 41.3 24 41.9c-1.1-.7-4.7-4-9.5-8.3-5.7-5-11.5-9.2-11.5-16C3 11.3 7.7 6.1 13.4 6.1c4.2 0 6.5 2 8.1 4.3 1.9 2.6 2.2 3.9 2.5 3.9.3 0 .6-1.3 2.5-3.9 1.6-2.3 3.9-4.3 8.1-4.3m0-3c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5.6 0 1.1-.2 1.6-.5 1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
-            </svg>
-            <svg fill="#262626" height="24" viewBox="0 0 48 48" width="24">
+      </div>
+      <div className="border-b border-gray-100"></div>
+      <div className="text-gray-400 font-medium text-sm mb-7 mt-6 mx-3 px-2">
+        <img className="rounded w-full" src="https://picsum.photos/536/354" />
+      </div>
+      <div className="text-gray-600 font-semibold  mb-2 mx-3 px-2">
+        Dummy text of the printing and typesetting industry
+      </div>
+      <div className="text-gray-500 text-sm mb-6 mx-3 px-2">
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+        industry. Lorem Ipsum has been the industry's standard dummy text ever
+        since the 1500
+      </div>
+      <div className="flex justify-start mb-4 border-t border-gray-100">
+        <div className="flex w-full mt-1 pt-2 pl-5">
+          <span className="bg-white transition ease-out duration-300 hover:text-red-500 border w-8 h-8 px-2 pt-2 text-center rounded-full text-gray-400 cursor-pointer mr-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              width="14px"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
-                clip-rule="evenodd"
-                d="M47.5 46.1l-2.8-11c1.8-3.3 2.8-7.1 2.8-11.1C47.5 11 37 .5 24 .5S.5 11 .5 24 11 47.5 24 47.5c4 0 7.8-1 11.1-2.8l11 2.8c.8.2 1.6-.6 1.4-1.4zm-3-22.1c0 4-1 7-2.6 10-.2.4-.3.9-.2 1.4l2.1 8.4-8.3-2.1c-.5-.1-1-.1-1.4.2-1.8 1-5.2 2.6-10 2.6-11.4 0-20.6-9.2-20.6-20.5S12.7 3.5 24 3.5 44.5 12.7 44.5 24z"
-                fill-rule="evenodd"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
               ></path>
             </svg>
-            <svg fill="#262626" height="24" viewBox="0 0 48 48" width="24">
-              <path d="M47.8 3.8c-.3-.5-.8-.8-1.3-.8h-45C.9 3.1.3 3.5.1 4S0 5.2.4 5.7l15.9 15.6 5.5 22.6c.1.6.6 1 1.2 1.1h.2c.5 0 1-.3 1.3-.7l23.2-39c.4-.4.4-1 .1-1.5zM5.2 6.1h35.5L18 18.7 5.2 6.1zm18.7 33.6l-4.4-18.4L42.4 8.6 23.9 39.7z"></path>
+          </span>
+        </div>
+        <div className="flex justify-end w-full mt-1 pt-2 pr-5">
+          {/* SHARE ICON */}
+          <span className="transition ease-out duration-300 hover:bg-blue-50 bg-blue-100 w-8 h-8 px-2 py-2 text-center rounded-full text-blue-400 cursor-pointer mr-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              width="14px"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+              ></path>
             </svg>
+          </span>
+          {/* HEART ICON */}
+          <span className="transition ease-out duration-300 hover:bg-gray-50 bg-gray-100 h-8 px-2 py-2 text-center rounded-full text-gray-100 cursor-pointer">
+            <svg
+              className="h-4 w-4 text-red-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"
+              ></path>
+            </svg>
+          </span>
+        </div>
+      </div>
+      <div className="flex w-full border-t border-gray-100">
+        <div className="mt-3 mx-5 flex flex-row text-xs">
+          <div className="flex text-gray-700 font-normal rounded-md mb-2 mr-4 items-center">
+            Comments:<div className="ml-1 text-gray-400 text-ms"> 30</div>
           </div>
-          <div className="flex">
-            <svg fill="#262626" height="24" viewBox="0 0 48 48" width="24">
-              <path d="M43.5 48c-.4 0-.8-.2-1.1-.4L24 29 5.6 47.6c-.4.4-1.1.6-1.6.3-.6-.2-1-.8-1-1.4v-45C3 .7 3.7 0 4.5 0h39c.8 0 1.5.7 1.5 1.5v45c0 .6-.4 1.2-.9 1.4-.2.1-.4.1-.6.1zM24 26c.8 0 1.6.3 2.2.9l15.8 16V3H6v39.9l15.8-16c.6-.6 1.4-.9 2.2-.9z"></path>
-            </svg>
+          <div className="flex text-gray-700 font-normal rounded-md mb-2 mr-4 items-center">
+            Views: <div className="ml-1 text-gray-400 text-ms"> 60k</div>
           </div>
         </div>
-        <div className="font-semibold text-sm px-4 pt-2 pb-4">92,372 likes</div>
+        <div className="mt-3 mx-5 w-full flex justify-end text-xs">
+          <div className="flex text-gray-700  rounded-md mb-2 mr-4 items-center">
+            Likes: <div className="ml-1 text-gray-400 text-ms"> 120k</div>
+          </div>
+        </div>
+      </div>
+      <div className="relative flex items-center self-center w-full max-w-xl p-4 overflow-hidden text-gray-600 focus-within:text-gray-400">
+        <Avatar className="w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center shadow-inner border">
+          <AvatarImage src="/" />
+          <AvatarFallback>BM</AvatarFallback>
+        </Avatar>
+        {/* <img
+          className=""
+          alt="User avatar"
+          src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=2000&amp;q=80"
+        /> */}
+        <span className="absolute inset-y-0 right-0 flex items-center pr-6"></span>
+        <input
+          type="search"
+          className="w-full py-2 pl-4 pr-10 text-sm bg-gray-100 border border-transparent appearance-none rounded-tg placeholder-gray-400 focus:bg-white focus:outline-none focus:border-blue-500 focus:text-gray-900 focus:shadow-outline-blue rounded-[25px]"
+          placeholder="Post a comment..."
+          autoComplete="off"
+        />
       </div>
     </div>
   );

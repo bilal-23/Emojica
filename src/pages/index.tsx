@@ -18,8 +18,8 @@ export default function Home() {
         <title>Emojica | Home</title>
       </Head>
       <main
-        className={`flex min-h-screen justify-between 
-        lg:yp-24 py-0 relative bg-[#edf2f7] z-100 gap-4`}
+        className={`flex justify-between 
+        lg:yp-24 py-0  bg-[#edf2f7] z-100 gap-4 `}
       >
         <Aside />
         <div className="py-10">

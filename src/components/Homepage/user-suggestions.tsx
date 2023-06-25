@@ -2,7 +2,7 @@ import React from "react";
 
 const UserSuggestions = () => {
   return (
-    <div className="hidden md:block lg:block py-8   sticky top-6">
+    <div className="hidden md:block lg:block py-8 h-max sticky top-[70px]">
       <div className="w-96 rounded-lg shadow border ">
         <header className="font-bold text-2xl px-5 py-4">Who to follow</header>
 

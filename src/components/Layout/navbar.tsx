@@ -33,7 +33,7 @@ const Navbar: React.FC = () => {
     toast.success("Logged out successfully", { toastId: "logout" });
   };
   return (
-    <nav className="bg-gray-100 shadow lg:px-48 border-b  sticky top-0 z-10">
+    <nav className="bg-[#edf2f7] shadow lg:px-48 border-b sticky top-0 z-10 ">
       <div className="max-w-7xl mx-auto px-2 md:px-4 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex px-2 lg:px-0">

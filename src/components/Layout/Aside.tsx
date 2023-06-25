@@ -3,7 +3,11 @@ import React from "react";
 
 const Aside = () => {
   return (
-    <aside className="z-101 hidden w-80 overflow-y-auto  md:block flex-shrink-0 py-8">
+    <aside
+      className="z-101 hidden w-80 md:block flex-shrink-0 py-8
+      sticky top-[70px] h-max
+    "
+    >
       <div className="flex flex-col align-center justify-center">
         <div className="p-2 flex justify-start ">
           <Link

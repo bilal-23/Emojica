@@ -1,10 +1,18 @@
-import Link from "next/link";
-import { useRouter } from "next/router";
 import React from "react";
+import Link from "next/link";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 const Aside = () => {
   const router = useRouter();
-  const { pathname } = router;
+  const { asPath } = router;
+
+  const handleLogout = async () => {
+    await signOut();
+    router.push("/auth");
+    toast.success("Logged out successfully");
+  };
 
   return (
     <aside
@@ -16,7 +24,10 @@ const Aside = () => {
         <div className="p-2 flex justify-start ">
           <Link
             href="#"
-            className="relative flex flex-row items-center h-11 focus:outline-none  text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
+            className={`relative flex flex-row items-center h-11 focus:outline-none  text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6 ${
+              asPath === "/" && "text-indigo-500 font-semibold"
+            }
+            `}
           >
             <span className="inline-flex justify-center items-center ml-4">
               <svg
@@ -39,8 +50,11 @@ const Aside = () => {
         </div>
         <div className="p-2 flex justify-start ">
           <Link
-            href="#"
-            className="relative flex flex-row items-center h-11 focus:outline-none  text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
+            href="/explore"
+            className={`relative flex flex-row items-center h-11 focus:outline-none  text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6 ${
+              asPath === "/explore" && "text-indigo-500 font-semibold"
+            }
+            `}
           >
             <span className="inline-flex justify-center items-center ml-4">
               <svg
@@ -61,8 +75,12 @@ const Aside = () => {
 
         <div className=" my-2 p-2 flex  justify-start">
           <Link
-            href="#"
-            className="relative flex flex-row items-center h-11 focus:outline-none  text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
+            href="/profile/?bookmarks=true"
+            className={`relative flex flex-row items-center h-11 focus:outline-none  text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6 ${
+              asPath === "/profile?bookmarks=true" &&
+              "text-indigo-500 font-semibold"
+            }
+            `}
           >
             <span className="inline-flex justify-center items-center ml-4">
               <svg
@@ -88,9 +106,10 @@ const Aside = () => {
 
         <div className=" my-2 p-2 flex  justify-start">
           <Link
-            href="/profile"
-            className={`relative flex flex-row items-center h-11 focus:outline-none  text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6
-            ${pathname === "/profile" && "border-indigo-500"}
+            href="/profile?bookmarks=false"
+            className={`relative flex flex-row items-center h-11 focus:outline-none  text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6 ${
+              asPath === "/profile" && "text-indigo-500"
+            } ${asPath === "/profile?bookmarks=false" && "text-indigo-500"}
             `}
           >
             <span className="inline-flex justify-center items-center ml-4">
@@ -114,8 +133,8 @@ const Aside = () => {
         </div>
 
         <div className=" my-2 p-2 flex  justify-start">
-          <Link
-            href="#"
+          <button
+            onClick={handleLogout}
             className="relative flex flex-row items-center h-11 focus:outline-none  text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
           >
             <span className="inline-flex justify-center items-center ml-4">
@@ -141,7 +160,7 @@ const Aside = () => {
               </svg>
             </span>
             <span className="ml-2 text-sm tracking-wide truncate">Logout</span>
-          </Link>
+          </button>
         </div>
       </div>
     </aside>

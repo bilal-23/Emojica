@@ -1,5 +1,6 @@
 import React from "react";
 import { ScrollArea } from "@/components/UI/scroll";
+import Link from "next/link";
 
 const UserSuggestions = () => {
   return (
@@ -18,13 +19,16 @@ const UserSuggestions = () => {
               />
             </div>
 
-            <div className="col-span-3 px-1 font-semibold flex flex-col">
+            <Link
+              href="/user/1"
+              className="col-span-3 px-1 font-semibold flex flex-col"
+            >
               <div className="text-sm"> Sangwa Albine </div>
               <div className="text-xm text-gray-700 font-light">
                 {" "}
                 @__svngwa._{" "}
               </div>
-            </div>
+            </Link>
 
             <div className="col-span-2 py-2 justify-self-end">
               <button className=" text-blue-500 text-xs font-semibold text-md rounded-full py-1 px-4">
@@ -41,10 +45,13 @@ const UserSuggestions = () => {
               />
             </div>
 
-            <div className="col-span-3 px-1 font-semibold flex flex-col ">
+            <Link
+              href="/user/1"
+              className="col-span-3 px-1 font-semibold flex flex-col "
+            >
               <div className="text-sm"> Mbonyintege </div>
               <div className="text-xm text-gray-700 font-light"> @Cpwr</div>
-            </div>
+            </Link>
 
             <div className="col-span-2 py-2 justify-self-end">
               <button className=" text-blue-500 text-xs font-semibold text-md rounded-full py-1 px-4">

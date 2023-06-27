@@ -1,9 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Icons } from "../UI/Icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCompass,
-  faHouse,
   faUser,
   faBookmark,
   faRightFromBracket,
@@ -25,14 +23,28 @@ import Link from "next/link";
 
 const Navbar: React.FC = () => {
   const { isLoading, data } = useGetProfileQuery();
-  const name =
-    data && data?.firstName.split("")[0] + data?.lastName.split("")[0];
+  const [name, setName] = React.useState<string | null>(null);
+  const [search, setSearch] = React.useState<string | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    if (!data) return;
+    let fallbackName = data.firstName.split("")[0] + data.lastName.split("")[0];
+    setName(fallbackName);
+  }, [data]);
+
   const handleLogout = async () => {
     await signOut();
     router.push("/auth");
     toast.success("Logged out successfully", { toastId: "logout" });
   };
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!search) return;
+    router.push(`/search?q=${search}`);
+  };
+
   return (
     <nav className="bg-[#edf2f7] shadow lg:px-48 border-b sticky top-0 z-10 ">
       <div className="max-w-7xl mx-auto px-2 md:px-4 lg:px-8">
@@ -44,7 +56,10 @@ const Navbar: React.FC = () => {
             </Link>
           </div>
           <div className="flex-1 w-full flex items-center justify-center px-2 ">
-            <form className=" w-full lg:max-w-xs max-w-xs">
+            <form
+              className=" w-full lg:max-w-xs max-w-xs"
+              onSubmit={handleSearch}
+            >
               <label htmlFor="search" className="sr-only">
                 Search
               </label>
@@ -68,6 +83,7 @@ const Navbar: React.FC = () => {
                    bg-gray-50 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:border-blue-300 focus:shadow-outline-blue sm:text-sm transition duration-150 ease-in-out"
                   placeholder="Search"
                   type="search"
+                  onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
             </form>
@@ -100,11 +116,16 @@ const Navbar: React.FC = () => {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem className="flex justify-between cursor-pointer">
-                    Bookmarks{" "}
-                    <FontAwesomeIcon
-                      icon={faBookmark}
-                      style={{ width: "15px", height: "15px" }}
-                    />
+                    <Link
+                      href="/profile?bookmarks=true"
+                      className=" w-full flex justify-between cursor-pointer"
+                    >
+                      Bookmarks{" "}
+                      <FontAwesomeIcon
+                        icon={faBookmark}
+                        style={{ width: "15px", height: "15px" }}
+                      />
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     className="flex justify-between cursor-pointer"

@@ -14,27 +14,39 @@ import {
   faChevronLeft,
   faEllipsisVertical,
 } from "@fortawesome/free-solid-svg-icons";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 const PostDetail = () => {
+  const router = useRouter();
   return (
     <div className="bg-white shadow rounded-lg mt-2 sm:mt-5 mb-5">
       <div className="bg-white py-2 px-2 mx-2 flex items-center">
         <FontAwesomeIcon
           icon={faChevronLeft}
           className="cursor-pointer transition-all active:scale-90"
+          onClick={() => router.back()}
         />
       </div>
       <div className="flex flex-row px-2 py-3 mx-3">
-        <Avatar className=" border-2 border-green-500 w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center ">
-          <AvatarImage src="/" />
-          <AvatarFallback>BM</AvatarFallback>
-        </Avatar>
+        <Link href="/user/1">
+          <Avatar className=" border-2 border-green-500 w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center ">
+            <AvatarImage src="/" />
+            <AvatarFallback>BM</AvatarFallback>
+          </Avatar>
+        </Link>
         <div className="flex flex-col mb-2 ml-4 mt-1">
-          <div className="text-gray-600 text-sm font-semibold">Sara Lauren</div>
-          <div className="flex w-full mt-1">
-            <div className="text-blue-700 font-base text-xs mr-1 cursor-pointer">
-              UX Design
+          <Link href="/user/1">
+            <div className="text-gray-600 text-sm font-semibold">
+              Sara LaurenL
             </div>
+          </Link>
+          <div className="flex w-full mt-1">
+            <Link href="/user/1">
+              <div className="text-blue-700 font-base text-xs mr-1 cursor-pointer">
+                UX Design lL
+              </div>
+            </Link>
             <div className="text-gray-400 font-thin text-xs">• 1 day ago</div>
           </div>
         </div>
@@ -108,12 +120,12 @@ const PostDetail = () => {
       </div>
       <div className="flex w-full border-t border-gray-100 justify-between gap-2">
         <div className="mt-3 mx-2 xs:mx-5 flex flex-row text-xs">
-          <div className="flex text-gray-700 font-normal rounded-md mb-2 xs:mr-4 items-center">
-            Comments:<div className="ml-1 text-gray-400 text-ms"> 30</div>
-          </div>
-          <div className="flex text-gray-700 font-normal rounded-md mb-2 ml-2 xs:mr-4 items-center">
-            Views: <div className="ml-1 text-gray-400 text-ms"> 60k</div>
-          </div>
+          <Link href="/post/1">
+            <div className="flex text-gray-700 font-normal rounded-md mb-2 xs:mr-4 items-center cursor-pointer hover:text-blue-500">
+              Comments:
+              <div className="ml-1 text-gray-400 text-ms font-semibold">30</div>
+            </div>
+          </Link>
         </div>
         <div className="mt-3 xs:mx-5 w-full flex justify-end text-xs">
           <div className="flex text-gray-700  rounded-md mb-2 mr-4 items-center">
@@ -123,10 +135,12 @@ const PostDetail = () => {
       </div>
       {/* COmmetns */}
       <div className="w-full relative flex items-center self-center  p-4 overflow-hidden text-gray-600 focus-within:text-gray-400">
-        <Avatar className="w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center shadow-inner border">
-          <AvatarImage src="/" />
-          <AvatarFallback>BM</AvatarFallback>
-        </Avatar>
+        <Link href={"/profile"}>
+          <Avatar className="w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center shadow-inner border">
+            <AvatarImage src="/" />
+            <AvatarFallback>BM</AvatarFallback>
+          </Avatar>
+        </Link>
         <input
           type="search"
           className="w-full py-2 pl-4 pr-10 text-sm bg-gray-100 border border-transparent appearance-none rounded-tg placeholder-gray-400 focus:bg-white focus:outline-none focus:border-blue-500 focus:text-gray-900 focus:shadow-outline-blue rounded-[25px]"
@@ -136,10 +150,12 @@ const PostDetail = () => {
       </div>
       <div className="flex w-full flex-col border-t border-gray-100">
         <div className="w-full relative flex gap-2 items-start self-center  p-4 overflow-hidden text-gray-600 ">
-          <Avatar className="w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center shadow-inner border">
-            <AvatarImage src="/" />
-            <AvatarFallback>BM</AvatarFallback>
-          </Avatar>
+          <Link href="/user/1">
+            <Avatar className="w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center shadow-inner border">
+              <AvatarImage src="/" />
+              <AvatarFallback>BM</AvatarFallback>
+            </Avatar>
+          </Link>
           <p className="text-justify">
             Lorem Ipsum is simply dummy text of the printing and typesetting ext
             of the printinext of the printinext of the printin ummy text of the
@@ -159,49 +175,6 @@ const PostDetail = () => {
               <DropdownMenuItem>Delete Comment</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        </div>
-
-        <div className="w-full relative flex items-flex-start self-center  p-4 overflow-hidden text-gray-600 ">
-          <Avatar className="w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center shadow-inner border">
-            <AvatarImage src="/" />
-            <AvatarFallback>BM</AvatarFallback>
-          </Avatar>
-          <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting ext
-            of the printinext of the printinext of the printin ummy text of the
-            printing and typesetting ext of the printinext of the printinext of
-            tummy text of the printing and typesetting ext of the printinext of
-            the printinext of tummy text of the printing and typesetting ext of
-            the printinext of the printinext of t
-          </p>
-        </div>
-        <div className="w-full relative flex items-flex-start self-center  p-4 overflow-hidden text-gray-600 ">
-          <Avatar className="w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center shadow-inner border">
-            <AvatarImage src="/" />
-            <AvatarFallback>BM</AvatarFallback>
-          </Avatar>
-          <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting ext
-            of the printinext of the printinext of the printin ummy text of the
-            printing and typesetting ext of the printinext of the printinext of
-            tummy text of the printing and typesetting ext of the printinext of
-            the printinext of tummy text of the printing and typesetting ext of
-            the printinext of the printinext of t
-          </p>
-        </div>
-        <div className="w-full relative flex items-flex-start self-center  p-4 overflow-hidden text-gray-600 ">
-          <Avatar className="w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center shadow-inner border">
-            <AvatarImage src="/" />
-            <AvatarFallback>BM</AvatarFallback>
-          </Avatar>
-          <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting ext
-            of the printinext of the printinext of the printin ummy text of the
-            printing and typesetting ext of the printinext of the printinext of
-            tummy text of the printing and typesetting ext of the printinext of
-            the printinext of tummy text of the printing and typesetting ext of
-            the printinext of the printinext of t
-          </p>
         </div>
       </div>
     </div>

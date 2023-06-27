@@ -21,13 +21,17 @@ const Layout: React.FC<Props> = ({ children }) => {
       {router.pathname === "/auth" ? null : <Navbar />}
       <div
         className={cn(
-          "min-h-screen flex justify-between z-100 gap-1  lg:yp-24 py-0  bg-[#edf2f7] font-sans antialiased max-w-7xl mx-auto my-0 ",
+          "min-h-screen flex justify-between z-100  lg:yp-24 py-0  bg-[#edf2f7] font-sans antialiased max-w-7xl mx-auto my-0 gap-2 ",
           fontSans.variable
         )}
       >
-        {router.pathname === "/auth" ? null : <Aside />}
+        {router.pathname === "/auth" || router.pathname === "/404" ? null : (
+          <Aside />
+        )}
         {children}
-        {router.pathname === "/auth" ? null : <UserSuggestions />}
+        {router.pathname === "/auth" || router.pathname === "/404" ? null : (
+          <UserSuggestions />
+        )}
       </div>
       {router.pathname === "/auth" ? null : <MobileNav />}
     </>

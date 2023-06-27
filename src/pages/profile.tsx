@@ -1,10 +1,9 @@
-import Post from "@/components/Post/post";
 import About from "@/components/Profile/about";
 import ProfilePosts from "@/components/Profile/profile-posts";
-import { Avatar } from "@/components/UI/avatar";
-import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { GetServerSideProps, NextPage } from "next";
+import { getServerSession } from "next-auth";
 import React from "react";
+import { authOptions } from "./api/auth/[...nextauth]";
 
 interface Props {
   bookmarks: boolean;
@@ -21,6 +20,16 @@ const Profile: NextPage<Props> = ({ bookmarks }) => {
 export default Profile;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/auth?redirect=profile",
+        permanent: false,
+      },
+    };
+  }
   const { bookmarks } = context.query;
   if (bookmarks === "true") {
     return {

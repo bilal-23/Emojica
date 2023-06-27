@@ -5,12 +5,9 @@ import Head from "next/head";
 import { useGetAllUserQuery } from "@/queries/userQueries";
 import Feed from "@/components/Homepage/feed";
 import CreatePost from "@/components/Post/create-post";
-import Aside from "@/components/Layout/Aside";
-import UserSuggestions from "@/components/Homepage/user-suggestions";
 
 export default function Home() {
   const { isLoading, isError, data } = useGetAllUserQuery();
-  console.log(data);
 
   return (
     <>

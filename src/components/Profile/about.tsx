@@ -5,69 +5,100 @@ interface Props {
 }
 const About: React.FC<Props> = ({ isProfile }) => {
   return (
-    <div className="flex flex-col lg:flex-row rounded-lg flex-wrap border-2 bg-white">
-      <div className="w-full lg:w-1/4 px-2  py-4  text-center flex  items-center justify-start lg:justify-end lg:items-start">
-        <div className="w-max relative lg:w-3/4 pt-3 justify-end">
-          <Avatar className="h-20 w-20 rounded-full flex justify-center items-center border-2 bg-white">
-            <AvatarImage src="" />
-            <AvatarFallback className="bg-white">JW</AvatarFallback>
-          </Avatar>
-        </div>
-        <div className="text-left pl-4 pt-3 flex items-center flex-wrap gap-2 lg:hidden">
-          <span className=" text-gray-700 text-2xl mr-2 break-words">
-            HiraveSonali
-          </span>
-          <span className="text-base font-semibold text-gray-700 mr-2">
-            {isProfile ? (
-              <button className="bg-transparent hover:bg-blue-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-600 hover:border-transparent rounded">
-                Edit Profile
-              </button>
-            ) : (
-              <button className="bg-transparent bg-blue-500 font-semibold text-white py-2 px-4 border-transparent rounded">
-                Follow
-              </button>
-            )}
-          </span>
-        </div>
+    <header className="flex flex-wrap items-center p-4 md:py-8 bg-white rounded-lg">
+      <div className="md:w-3/12 flex  justify-center">
+        {/* <!-- profile image --> */}
+        <Avatar
+          className="h-20 w-20 flex justify-center items-center  bg-white object-cover rounded-full
+                   border-2 border-pink-600 p-1"
+        >
+          <AvatarImage src="" />
+          <AvatarFallback className="bg-white">JW</AvatarFallback>
+        </Avatar>
       </div>
-      <div className="w-full md:w-3/4 px-2 py-4 text-center">
-        <div className="text-left pl-4 pt-3 hidden lg:block">
-          <span className=" text-gray-700 text-2xl mr-2">HiraveSonali</span>
-          <span className="text-base font-semibold text-gray-700 mr-2">
-            <button className="bg-transparent hover:bg-blue-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-600 hover:border-transparent rounded">
-              Edit Profile
-            </button>
+
+      {/* <!-- profile meta --> */}
+      <div className="w-8/12 md:w-7/12 ml-2 xs:ml-4">
+        <div className="md:flex md:flex-wrap md:items-center mb-4">
+          <h2 className="text-3xl inline-block font-light md:mr-2 mb-2 sm:mb-0">
+            mrtravlerrr_
+          </h2>
+
+          {/* <!-- badge --> */}
+          <span
+            className="inline-block fas fa-certificate fa-lg text-blue-500 
+                             relative mr-6 text-xl transform -translate-y-2"
+            aria-hidden="true"
+          >
+            <i
+              className="fas fa-check text-white text-xs absolute inset-x-0
+                             ml-1 mt-px"
+            ></i>
           </span>
-        </div>
-        <div className="text-left pl-4 pt-3">
-          <span className="text-base font-semibold text-gray-700 mr-2">
-            <b>220</b> posts
-          </span>
-          <span className="text-base font-semibold text-gray-700 mr-2">
-            <b>114</b> followers
-          </span>
-          <span className="text-base font-semibold text-gray-700">
-            <b>200</b> following
-          </span>
-        </div>
-        <div className="text-left pl-4 pt-2">
-          <span className="text-lg font-bold text-gray-700 mr-2">
-            Sonali Hirave
-          </span>
-        </div>
-        <div className="text-left pl-4 pt-2">
-          <p className="text-base font-medium text-gray-700 mr-2 break-words">
-            Limitedd Edition
-          </p>
+
+          {/* <!-- follow button --> */}
           <a
             href="#"
-            className="text-base font-medium text-blue-500 mr-2 cursor-pointer break-words"
+            className="bg-blue-500 px-2 py-1 
+                      text-white font-semibold text-sm rounded block text-center 
+                      sm:inline-block "
           >
-            https://www.behance.net/hiravesona7855
+            Follow
           </a>
         </div>
+
+        {/* <!-- post, following, followers list for medium screens --> */}
+        <ul className="hidden md:flex space-x-4 mb-4">
+          <li>
+            <span className="font-semibold">136</span>
+            posts
+          </li>
+
+          <li>
+            <span className="font-semibold">40.5k</span>
+            followers
+          </li>
+          <li>
+            <span className="font-semibold">302</span>
+            following
+          </li>
+        </ul>
+
+        {/* <!-- user meta form medium screens --> */}
+        <div className="hidden md:block">
+          <h1 className="font-semibold">Mr Travlerrr...</h1>
+          <span>Travel, Nature and Music</span>
+          <p>Lorem ipsum dolor sit amet consectetur</p>
+        </div>
       </div>
-    </div>
+
+      {/* <!-- user meta form small screens --> */}
+      <div className="md:hidden text-sm my-2">
+        <h1 className="font-semibold">Mr Travlerrr...</h1>
+        <span>Travel, Nature and Music</span>
+        <p>Lorem ipsum dolor sit amet consectetur</p>
+      </div>
+      <div className="px-px md:px-3 w-full">
+        <ul
+          className="flex md:hidden justify-around space-x-8 border-t 
+        text-center p-2 text-gray-600 leading-snug text-sm"
+        >
+          <li>
+            <span className="font-semibold text-gray-800 block">136</span>
+            posts
+          </li>
+
+          <li>
+            <span className="font-semibold text-gray-800 block">40.5k</span>
+            followers
+          </li>
+          <li>
+            <span className="font-semibold text-gray-800 block">302</span>
+            following
+          </li>
+        </ul>
+      </div>
+    </header>
   );
 };
 

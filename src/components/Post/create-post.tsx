@@ -18,7 +18,7 @@ const CreatePost = () => {
         <footer className="flex justify-between mt-2">
           <div className="flex gap-2">
             <span
-              className="flex items-center transition ease-out duration-300 hover:bg-blue-500 hover:text-white bg-blue-100 w-8 h-8 px-2 rounded-full text-blue-400 cursor-pointer"
+              className="flex items-center transition ease-out duration-300 hover:bg-blue-600 hover:text-white bg-blue-100 w-8 h-8 px-2 rounded-full text-blue-500 cursor-pointer"
               onClick={() => toast.error("This feature is not available yet")}
             >
               <svg

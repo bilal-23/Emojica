@@ -38,9 +38,9 @@ export default function App({
         <QueryClientProvider client={queryClient}>
           <Layout>
             <Component {...pageProps} />
-            <Toaster />
-            <ReactToaster />
           </Layout>
+          <Toaster />
+          <ReactToaster />
         </QueryClientProvider>
       </SessionProvider>
     </>

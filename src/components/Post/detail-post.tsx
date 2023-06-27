@@ -1,12 +1,29 @@
 import React from "react";
 import { Avatar } from "../UI/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/UI/dropdown-menu";
 import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronLeft,
+  faEllipsisVertical,
+} from "@fortawesome/free-solid-svg-icons";
 
-const Post = () => {
+const PostDetail = () => {
   return (
-    <div className="bg-white shadow rounded-lg mt-2 sm:mt-5">
+    <div className="bg-white shadow rounded-lg mt-2 sm:mt-5 mb-5">
+      <div className="bg-white py-2 px-2 mx-2 flex items-center">
+        <FontAwesomeIcon
+          icon={faChevronLeft}
+          className="cursor-pointer transition-all active:scale-90"
+        />
+      </div>
       <div className="flex flex-row px-2 py-3 mx-3">
         <Avatar className=" border-2 border-green-500 w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center ">
           <AvatarImage src="/" />
@@ -104,6 +121,7 @@ const Post = () => {
           </div>
         </div>
       </div>
+      {/* COmmetns */}
       <div className="w-full relative flex items-center self-center  p-4 overflow-hidden text-gray-600 focus-within:text-gray-400">
         <Avatar className="w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center shadow-inner border">
           <AvatarImage src="/" />
@@ -116,8 +134,78 @@ const Post = () => {
           autoComplete="off"
         />
       </div>
+      <div className="flex w-full flex-col border-t border-gray-100">
+        <div className="w-full relative flex gap-2 items-start self-center  p-4 overflow-hidden text-gray-600 ">
+          <Avatar className="w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center shadow-inner border">
+            <AvatarImage src="/" />
+            <AvatarFallback>BM</AvatarFallback>
+          </Avatar>
+          <p className="text-justify">
+            Lorem Ipsum is simply dummy text of the printing and typesetting ext
+            of the printinext of the printinext of the printin ummy text of the
+            printing and typesetting ext of the printinext of the printinext of
+            tummy text of the printing and typesetting ext of the printinext of
+            the printinext of tummy text of the printing and typesetting ext of
+            the printinext of the printinext of t
+          </p>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <FontAwesomeIcon icon={faEllipsisVertical} />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Edit Comment</DropdownMenuItem>
+              <DropdownMenuItem>Delete Comment</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        <div className="w-full relative flex items-flex-start self-center  p-4 overflow-hidden text-gray-600 ">
+          <Avatar className="w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center shadow-inner border">
+            <AvatarImage src="/" />
+            <AvatarFallback>BM</AvatarFallback>
+          </Avatar>
+          <p>
+            Lorem Ipsum is simply dummy text of the printing and typesetting ext
+            of the printinext of the printinext of the printin ummy text of the
+            printing and typesetting ext of the printinext of the printinext of
+            tummy text of the printing and typesetting ext of the printinext of
+            the printinext of tummy text of the printing and typesetting ext of
+            the printinext of the printinext of t
+          </p>
+        </div>
+        <div className="w-full relative flex items-flex-start self-center  p-4 overflow-hidden text-gray-600 ">
+          <Avatar className="w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center shadow-inner border">
+            <AvatarImage src="/" />
+            <AvatarFallback>BM</AvatarFallback>
+          </Avatar>
+          <p>
+            Lorem Ipsum is simply dummy text of the printing and typesetting ext
+            of the printinext of the printinext of the printin ummy text of the
+            printing and typesetting ext of the printinext of the printinext of
+            tummy text of the printing and typesetting ext of the printinext of
+            the printinext of tummy text of the printing and typesetting ext of
+            the printinext of the printinext of t
+          </p>
+        </div>
+        <div className="w-full relative flex items-flex-start self-center  p-4 overflow-hidden text-gray-600 ">
+          <Avatar className="w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center shadow-inner border">
+            <AvatarImage src="/" />
+            <AvatarFallback>BM</AvatarFallback>
+          </Avatar>
+          <p>
+            Lorem Ipsum is simply dummy text of the printing and typesetting ext
+            of the printinext of the printinext of the printin ummy text of the
+            printing and typesetting ext of the printinext of the printinext of
+            tummy text of the printing and typesetting ext of the printinext of
+            the printinext of tummy text of the printing and typesetting ext of
+            the printinext of the printinext of t
+          </p>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default Post;
+export default PostDetail;

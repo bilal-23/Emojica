@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import { User } from "@/models/user";
+import { Post } from "@/models/post";
 import { connectMongoDB } from "@/lib/mongoConnect";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
@@ -7,57 +8,56 @@ import { authOptions } from "../auth/[...nextauth]";
 import { NextAuthSession } from "@/types/user";
 
 // GET - GET USER BY ID - POPULATE FOLLOWERS, FOLLOWING, AND BOOKMARKS
-// PATCH - UPDATE USER BY ID
-// DELETE - DELETE USER BY ID
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    const session = await getServerSession(req, res, authOptions) as NextAuthSession | null;
-    if (!session) {
-        return res.status(401).json({ message: "Unauthorized" });
-    }
 
-    if (req.method !== "GET" && req.method !== "PATCH" && req.method !== "DELETE") {
+    const session = await getServerSession(req, res, authOptions) as NextAuthSession | null;
+    if (!session) return res.status(401).json({ message: "Unauthorized" });
+    const authUserId = session.user.id;
+
+    if (req.method !== "GET") {
         return res.status(405).json({ message: "Method Not Allowed" });
     }
     try {
-        await connectMongoDB();
+        try {
+            await connectMongoDB();
+        }
+        catch (error) {
+            return res.status(500).json({ message: "Internal Server Error, Cannot Connect DB", error });
+        }
         // GET USER ID FROM URL
         const userId = req.query.userId as string;
         if (!userId) return res.status(400).json({ message: "User ID is required" });
-        const _id = new ObjectId(userId);
 
         // GET USER BY ID
-        if (req.method === "GET") {
-            const user = await getUserById(_id);
+        const user = await getUserById(userId);
+        if (!user) return res.status(404).json({ message: "User not found" });
+        // IF AUTH USER IS NOT THE SAME AS USER ID, REMOVE EMAIL AND BOOKMARKS
+        if (authUserId.toString() !== userId.toString()) {
+            user.email = undefined;
+            user.bookmarks = undefined;
+            user.password = undefined;
             return res.status(200).json({ user });
+        };
+
+        // Remove the ids from bookmark array if it no longer exists in POSTS collection
+        const bookmarks = user.bookmarks;
+        if (bookmarks.length > 0) {
+            const bookmarkedPosts = await Post.find({ _id: { $in: bookmarks } });
+            console.log({ bookmarkedPosts })
+            if (bookmarkedPosts.length === 0) {
+                user.bookmarks = [];
+            } else {
+                const bookmarkedPostIds = bookmarkedPosts.map(post => post._id.toString());
+                user.bookmarks = bookmarkedPostIds;
+            }
+            await user.save();
         }
 
-        // UPDATE USER BY ID
-        else if (req.method === "PATCH") {
-            // GET DATA FROM BODY
-            const { firstName, lastName, username, email, link, bio, pic } = req.body;
-            // UPDATE USER BY ID
-            await User.updateOne({ _id }, {
-                firstName,
-                lastName,
-                username,
-                email,
-                link,
-                bio,
-                pic,
-                updatedAt: new Date()
-            });
-            return res.status(200).json({ message: "User updated successfully" });
-        }
-
-        // DELETE USER BY ID
-        else if (req.method === "DELETE") {
-            // DELETE USER BY ID
-            await deleteUserById(_id);
-            return res.status(200).json({ message: "User deleted successfully" });
-        }
+        user.password = undefined;
+        return res.status(200).json({ user });
 
     }
     catch (error) {
@@ -65,20 +65,11 @@ export default async function handler(
     }
 }
 
-async function getUserById(_id: ObjectId) {
-    return await User.find({ _id })
-        .populate('following', '_id firstName pic username')
-        .populate('followers', '_id firstName pic username')
-        .populate({
-            path: 'bookmarks',
-            populate: {
-                path: 'author',
-                select: '_id firstName pic username'
-            }
-        });
-}
+async function getUserById(userId: string) {
+    const user = await User.findById(userId)
+        .populate('following', '_id firstName lastName pic username')
+        .populate('followers', '_id firstName lastName pic username');
 
-async function deleteUserById(_id: ObjectId) {
-    // DELETE USER BY ID
-    return await User.deleteOne({ _id });
+    return user;
+
 }

@@ -6,20 +6,20 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
 import { NextAuthSession } from "@/types/user";
 
+
 // Get ALL POSTS - POPULATES AUTHOR AND COMMENTS
+// Create a POST
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const session = await getServerSession(req, res, authOptions) as NextAuthSession | null;
-  if (!session) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-  const userId = session.user.id;
-
   if (req.method !== "GET" && req.method !== "POST") {
     return res.status(405).json({ message: "Method Not Allowed" });
   }
+
+  const session = await getServerSession(req, res, authOptions) as NextAuthSession | null;
+  if (!session) return res.status(401).json({ message: "Unauthorized" });
+  const userId = session.user.id;
 
   try {
     await connectMongoDB();
@@ -44,11 +44,10 @@ export default async function handler(
         return res.status(404).json({ message: "User Not Found" });
       }
 
-      const author = user._id;
       const newPost = new Post({
         content,
-        author,
         imageUrl,
+        author: userId,
       });
 
       await newPost.save();
@@ -62,8 +61,8 @@ export default async function handler(
 async function getPosts() {
   const posts = await Post.find({})
     .populate([
-      { path: "author", select: "_id firstName pic username" },
-      { path: "comments.user", select: "_id firstName pic username" },
+      { path: "author", select: "_id firstName lastName pic username" },
+      { path: "comments.user", select: "_id firstName lastName pic username" },
     ])
     .sort({ createdAt: -1 }); // -1: DESC, 1: ASC
   return posts;

@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import { User } from "@/models/user";
 import { Post } from "@/models/post";
 import { connectMongoDB } from "@/lib/mongoConnect";
@@ -7,30 +6,29 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
 import { NextAuthSession } from "@/types/user";
 
+
 // Like a post
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    const session = await getServerSession(req, res, authOptions) as NextAuthSession | null;
-    if (!session) {
-        return res.status(401).json({ message: "Unauthorized" });
-    }
-    const userId = session.user.id;
-
     if (req.method !== "POST") {
         return res.status(405).json({ message: "Method Not Allowed" });
     }
+
+    const session = await getServerSession(req, res, authOptions) as NextAuthSession | null;
+    if (!session) return res.status(401).json({ message: "Unauthorized" });
+    const userId = session.user.id;
+
     try {
         await connectMongoDB();
         // GET USER ID AND POST ID FROM REQUEST BODY
         const { postId } = req.body;
-        const _id = new ObjectId(userId);
-        if (!postId) {
-            return res.status(400).json({ message: "Missing  postId" });
+        if (!userId || !postId) {
+            return res.status(400).json({ message: "Missing userId or postId" });
         }
         // FIND USER BY ID
-        const user = await User.findOne({ _id });
+        const user = await User.findById(userId);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -41,13 +39,13 @@ export default async function handler(
         }
 
         // CHECK IF ALREADY LIKED
-        if (post.likes.likedBy.includes(_id)) {
+        if (post.likes.likedBy.includes(userId)) {
             return res.status(400).json({ message: "Post is already liked" });
         }
 
-        post.likes.likedBy.push(_id);
+        post.likes.likedBy.push(userId);
         // Remove user from dislikedBy array if present
-        const index = post.likes.dislikedBy.indexOf(_id);
+        const index = post.likes.dislikedBy.indexOf(userId);
         if (index > -1) {
             post.likes.dislikedBy.splice(index, 1);
         }

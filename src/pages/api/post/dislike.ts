@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import { User } from "@/models/user";
 import { Post } from "@/models/post";
 import { connectMongoDB } from "@/lib/mongoConnect";
@@ -12,25 +11,24 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    const session = await getServerSession(req, res, authOptions) as NextAuthSession | null;
-    if (!session) {
-        return res.status(401).json({ message: "Unauthorized" });
-    }
-    const userId = session.user.id;
-
     if (req.method !== "POST") {
         return res.status(405).json({ message: "Method Not Allowed" });
     }
+
+    const session = await getServerSession(req, res, authOptions) as NextAuthSession | null;
+    if (!session) return res.status(401).json({ message: "Unauthorized" });
+    const userId = session.user.id;
+
+
     try {
         await connectMongoDB();
         // GET USER ID AND POST ID FROM REQUEST BODY
         const { postId } = req.body;
-        const _userId = new ObjectId(userId);
         if (!userId || !postId) {
             return res.status(400).json({ message: "Missing userId or postId" });
         }
         // FIND USER BY ID
-        const user = await User.findOne({ _id: _userId });
+        const user = await User.findById(userId);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -40,13 +38,13 @@ export default async function handler(
             return res.status(404).json({ message: "Post not found" });
         }
         // CHECK IF ALREADY DISLIKED
-        if (post.likes.dislikedBy.includes(_userId)) {
+        if (post.likes.dislikedBy.includes(userId)) {
             return res.status(400).json({ message: "Post is already disliked" });
         }
 
-        post.likes.dislikedBy.push(_userId);
+        post.likes.dislikedBy.push(userId);
         // Remove user from likedBy array if present
-        const index = post.likes.likedBy.indexOf(_userId);
+        const index = post.likes.likedBy.indexOf(userId);
         if (index > -1) {
             post.likes.likedBy.splice(index, 1);
         }

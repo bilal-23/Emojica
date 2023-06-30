@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import { Post } from "@/models/post";
 import { connectMongoDB } from "@/lib/mongoConnect";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -8,21 +7,18 @@ import { authOptions } from "../../auth/[...nextauth]";
 import { NextAuthSession } from "@/types/user";
 
 // DELETE COMMENT OF A POST
-
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    const session = await getServerSession(req, res, authOptions) as NextAuthSession | null;
-    if (!session) {
-        return res.status(401).json({ message: "Unauthorized" });
-    }
-    const userId = session.user.id;
-
-
     if (req.method !== "POST") {
         return res.status(405).json({ message: "Method Not Allowed" });
     }
+
+    const session = await getServerSession(req, res, authOptions) as NextAuthSession | null;
+    if (!session) return res.status(401).json({ message: "Unauthorized" });
+    const userId = session.user.id;
+
     try {
         await connectMongoDB();
 
@@ -31,11 +27,10 @@ export default async function handler(
         if (!commentId) return res.status(400).json({ message: "Comment ID is required" });
         if (!userId) return res.status(400).json({ message: "User ID is required" });
 
-        const _id = new ObjectId(postId);
-        const post = await getPostById(_id);
+        const post = await getPostById(postId);
         if (!post) return res.status(404).json({ message: "Post Not Found" });
 
-        const user = await User.findOne({ _id: new ObjectId(userId) });
+        const user = await User.findById(userId);
         if (!user) return res.status(404).json({ message: "User Not Found" });
 
         const commentIndex = post.comments.findIndex((comment: any) => comment._id.toString() === commentId);
@@ -57,8 +52,8 @@ export default async function handler(
     }
 }
 
-async function getPostById(_id: ObjectId) {
-    return await Post.findOne({ _id }).populate(
+async function getPostById(postId: string) {
+    return await Post.findById(postId).populate(
         [
             { path: "author", select: "_id firstName pic username" },
             { path: "comments.user", select: "_id firstName pic username" },

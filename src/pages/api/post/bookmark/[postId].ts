@@ -3,6 +3,9 @@ import { Post } from "@/models/post";
 import { connectMongoDB } from "@/lib/mongoConnect";
 import { NextApiRequest, NextApiResponse } from "next";
 import { User } from "@/models/user";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../auth/[...nextauth]";
+import { NextAuthSession } from "@/types/user";
 
 //POST - BOOKMARK A POST
 //DELETE - UNBOOKMARK A POST
@@ -10,9 +13,15 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
+    const session = await getServerSession(req, res, authOptions) as NextAuthSession | null;
+    if (!session) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+
     if (req.method !== "POST" && req.method !== "DELETE") {
         return res.status(405).json({ message: "Method Not Allowed" });
     }
+
     try {
         await connectMongoDB();
         // GET POST ID FROM URL
@@ -20,9 +29,7 @@ export default async function handler(
         if (!postId) return res.status(400).json({ message: "Post ID is required" });
         const _id = new ObjectId(postId);
 
-        // USER ID WILL TAKED THROUGH GET SESSION FOR NOW TAKE FROM BODY
-        // const userId = req.body.userId as string;
-        const userId = "6485d3f6d08ba8e3ed1a63ee"
+        const userId = session.user.id;
         if (!userId) return res.status(400).json({ message: "User ID is required" });
         const _userId = new ObjectId(userId);
 
@@ -64,10 +71,10 @@ export default async function handler(
 async function getPostById(_id: ObjectId) {
     return await Post.findOne({ _id }).populate(
         [
-            { path: "author", select: "_id firstName pic username" },
-            { path: "comments.user", select: "_id firstName pic username" },
-            { path: "likes.likedBy", select: "_id firstName pic username" },
-            { path: "likes.dislikedBy", select: "_id firstName pic username" }
+            { path: "author", select: "_id firstName lastName  pic username" },
+            { path: "comments.user", select: "_id firstName lastName  pic username" },
+            { path: "likes.likedBy", select: "_id firstName lastName  pic username" },
+            { path: "likes.dislikedBy", select: "_id firstName lastName  pic username" }
         ]
     );
 }

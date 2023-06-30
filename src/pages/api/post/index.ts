@@ -2,12 +2,21 @@ import { Post } from "@/models/post";
 import { connectMongoDB } from "@/lib/mongoConnect";
 import { NextApiRequest, NextApiResponse } from "next";
 import { User } from "@/models/user";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]";
+import { NextAuthSession } from "@/types/user";
 
 // Get ALL POSTS - POPULATES AUTHOR AND COMMENTS
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const session = await getServerSession(req, res, authOptions) as NextAuthSession | null;
+  if (!session) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  const userId = session.user.id;
+
   if (req.method !== "GET" && req.method !== "POST") {
     return res.status(405).json({ message: "Method Not Allowed" });
   }
@@ -23,14 +32,14 @@ export default async function handler(
     //
     // Create a POST
     else if (req.method === "POST") {
-      const { content, authorEmail } = req.body;
+      const { content, imageUrl = '' } = req.body;
 
-      if (!content || !authorEmail) {
+      if (!content) {
         return res.status(400).json({ message: "Bad Request" });
       }
 
       // FIND USER WITH EMAIL
-      const user = await User.findOne({ email: authorEmail });
+      const user = await User.findById(userId);
       if (!user) {
         return res.status(404).json({ message: "User Not Found" });
       }
@@ -39,6 +48,7 @@ export default async function handler(
       const newPost = new Post({
         content,
         author,
+        imageUrl,
       });
 
       await newPost.save();

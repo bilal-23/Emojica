@@ -5,6 +5,7 @@ import Head from "next/head";
 import { useGetAllUserQuery } from "@/queries/userQueries";
 import Feed from "@/components/Homepage/feed";
 import CreatePost from "@/components/Post/create-post";
+import { useEffect } from "react";
 
 export default function Home() {
   const { isLoading, isError, data } = useGetAllUserQuery();

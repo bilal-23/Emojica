@@ -30,3 +30,15 @@ export type profile = {
     "createdAt": Date,
     "updatedAt": Date,
 }
+
+export interface NextAuthSession {
+    user: {
+        email: string,
+        sub: string,
+        id: string,
+        iat: number,
+        exp: number,
+        jti: string
+    },
+    expires: Date
+}

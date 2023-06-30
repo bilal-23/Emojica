@@ -2,6 +2,9 @@ import { ObjectId } from "mongodb";
 import { User } from "@/models/user";
 import { connectMongoDB } from "@/lib/mongoConnect";
 import { NextApiRequest, NextApiResponse } from "next";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]";
+import { NextAuthSession } from "@/types/user";
 
 // GET - GET USER BY ID - POPULATE FOLLOWERS, FOLLOWING, AND BOOKMARKS
 // PATCH - UPDATE USER BY ID
@@ -10,6 +13,11 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
+    const session = await getServerSession(req, res, authOptions) as NextAuthSession | null;
+    if (!session) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+
     if (req.method !== "GET" && req.method !== "PATCH" && req.method !== "DELETE") {
         return res.status(405).json({ message: "Method Not Allowed" });
     }

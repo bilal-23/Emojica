@@ -1,8 +1,6 @@
 import React from "react";
 import { Avatar } from "../UI/avatar";
 import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { useRouter } from "next/router";
 

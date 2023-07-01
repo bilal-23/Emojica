@@ -5,13 +5,12 @@ import { Loader } from "../UI/loader";
 
 const Feed = () => {
   const { isLoading, data: posts } = useGetFeedPostsQuery();
-
   if (!posts && isLoading) {
     return <Loader />;
   }
   return (
     <div className="w-full xs:w-auto">
-      {posts ? (
+      {posts && posts.length > 0 ? (
         posts.map((post) => {
           return (
             <Post
@@ -32,7 +31,9 @@ const Feed = () => {
           );
         })
       ) : (
-        <p className="text-center mt-5">No Posts</p>
+        <p className="text-center mt-5">
+          Looks like your following haven't posted anything
+        </p>
       )}
     </div>
   );

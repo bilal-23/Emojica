@@ -31,5 +31,8 @@ export const useGetUserPostQuery = (userId: string) => useQuery({
     queryFn: async () => {
         const response = await axios.get<{ posts: any }>(`/api/user/all-posts/${userId}`);
         return response.data.posts;
+    },
+    onError: (error: AxiosError<{ message: string }>) => {
+        toast.error("Something went wrong while fetching user posts, please try loading the page again")
     }
 });

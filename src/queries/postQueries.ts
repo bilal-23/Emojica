@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
@@ -18,6 +18,20 @@ export const useCreatePostMutation = () => {
         }
     });
 }
+
+// Get all posts
+export const useGetAllPostsQuery = () => useQuery({
+    queryKey: ["all-posts"],
+    queryFn: async () => {
+        const response = await axios.get<{ posts: Post[] }>("/api/post");
+        return response.data.posts;
+    },
+    staleTime: 1000 * 60 * 5,// 5 minutes
+    onError: (error: AxiosError<{ message: string }>) => {
+        toast.error(error.response?.data.message);
+    }
+});
+
 
 // Get post detail
 export const useGetPostQuery = (postId: string) => useQuery({

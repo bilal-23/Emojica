@@ -11,15 +11,15 @@ const UserPosts: React.FC<Props> = ({ id }) => {
   if (isLoading) {
     return <Loader />;
   }
-  if (posts.length === 0) {
+  if (posts?.length === 0) {
     return <p className="text-center mt-5">No posts yet</p>;
   }
 
   return (
     <div>
+      {/* <Post />
       <Post />
-      <Post />
-      <Post />
+      <Post /> */}
     </div>
   );
 };

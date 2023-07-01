@@ -42,7 +42,11 @@ const PostDetail: React.FC<Props> = ({ id }) => {
           </div>
           <div className="flex flex-row px-2 py-3 mx-3">
             <Link
-              href={`/user/${post?.author._id}`}
+              href={`/user/${
+                post?.author._id === sessionUserId
+                  ? "profile"
+                  : post?.author._id
+              }`}
               className="flex items-center"
             >
               <Avatar className=" border-2  w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center ">
@@ -53,13 +57,25 @@ const PostDetail: React.FC<Props> = ({ id }) => {
               </Avatar>
             </Link>
             <div className="flex flex-col mb-2 ml-4 mt-1">
-              <Link href={`/user/${post?.author._id}`}>
+              <Link
+                href={`/user/${
+                  post?.author._id === sessionUserId
+                    ? "profile"
+                    : post?.author._id
+                }`}
+              >
                 <div className="text-gray-600 text-sm font-semibold">
                   {post?.author.firstName + " " + post?.author.lastName}
                 </div>
               </Link>
               <div className="flex w-full mt-1">
-                <Link href={`/user/${post?.author._id}`}>
+                <Link
+                  href={`/user/${
+                    post?.author._id === sessionUserId
+                      ? "profile"
+                      : post?.author._id
+                  }`}
+                >
                   <div className="text-blue-700 font-base text-xs mr-1 cursor-pointer">
                     @{post?.author.username}
                   </div>

@@ -1,8 +1,8 @@
 import React from "react";
 import ExplorePosts from "@/components/Explore";
 
-const explore = () => {
+const Explore = () => {
   return <ExplorePosts />;
 };
 
-export default explore;
+export default Explore;

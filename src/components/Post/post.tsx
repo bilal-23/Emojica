@@ -3,6 +3,7 @@ import { Avatar } from "../UI/avatar";
 import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useGetSession } from "@/hooks/use-session";
 
 interface Props {
   authorName: string;
@@ -31,6 +32,7 @@ const Post: React.FC<Props> = ({
   updatedAt,
 }) => {
   const router = useRouter();
+  const sessionUserId = useGetSession();
   const handleCommentSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     router.push(`/post/${postId}`);
@@ -39,20 +41,28 @@ const Post: React.FC<Props> = ({
   return (
     <div className="bg-white shadow rounded-lg mt-2 sm:mt-5">
       <div className="flex flex-row px-2 py-3 mx-3">
-        <Link href={`/user/${authorId}`}>
+        <Link
+          href={`/user/${authorId === sessionUserId ? "profile" : authorId}`}
+        >
           <Avatar className=" border-2  w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center ">
             <AvatarImage src={authorAvatar} />
             <AvatarFallback>{authorAvatarFallback}</AvatarFallback>
           </Avatar>
         </Link>
         <div className="flex flex-col mb-2 ml-4 mt-1">
-          <Link href={`/user/${authorId}`}>
+          <Link
+            href={`/user/${authorId === sessionUserId ? "profile" : authorId}`}
+          >
             <div className="text-gray-600 text-sm font-semibold">
               {authorName}
             </div>
           </Link>
           <div className="flex w-full mt-1">
-            <Link href={`/user/${authorId}`}>
+            <Link
+              href={`/user/${
+                authorId === sessionUserId ? "profile" : authorId
+              }`}
+            >
               <div className="text-blue-700 font-base text-xs mr-1 cursor-pointer">
                 @{authorUsername}
               </div>

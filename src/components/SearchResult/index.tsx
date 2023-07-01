@@ -18,6 +18,7 @@ const SearchResult = () => {
       </div>
       {/* <div > */}
       <ScrollArea className="shadow bg-white rounded-lg  mx-2 mt-2 p-2 sm:mt-5 mb-5 flex flex-col gap-2  overflow-scroll   md:h-[500px]">
+        {/* <UserSearchResult />
         <UserSearchResult />
         <UserSearchResult />
         <UserSearchResult />
@@ -36,8 +37,7 @@ const SearchResult = () => {
         <UserSearchResult />
         <UserSearchResult />
         <UserSearchResult />
-        <UserSearchResult />
-        <UserSearchResult />
+        <UserSearchResult /> */}
       </ScrollArea>
       {/* </div> */}
     </div>

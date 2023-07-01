@@ -13,6 +13,7 @@ export const useCreatePostMutation = () => {
         },
         onSuccess: (data) => {
             queryClient.refetchQueries(["myPosts"]);
+            queryClient.refetchQueries(["feed-posts"]);
             toast.success("Post created successfully");
         }
     });
@@ -24,5 +25,14 @@ export const useGetPostQuery = (postId: string) => useQuery({
     queryFn: async () => {
         const response = await axios.get<{ post: Post }>(`/api/post/${postId}`);
         return response.data.post;
+    }
+});
+
+// Get Feed Posts
+export const useGetFeedPostsQuery = () => useQuery({
+    queryKey: ["feed-posts"],
+    queryFn: async () => {
+        const response = await axios.get<{ feedPosts: Post[] }>(`/api/post/my-feed`);
+        return response.data.feedPosts;
     }
 });

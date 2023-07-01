@@ -53,6 +53,7 @@ export const useFollowUserMutation = () => {
             console.log(userId);
             queryClient.refetchQueries(["profile"]);
             queryClient.refetchQueries(["user", userId]);
+            queryClient.refetchQueries(["feed-posts"]);
 
         },
         onError: (error: AxiosError<{ message: string }>) => {
@@ -74,6 +75,7 @@ export const useUnfollowUserMutation = () => {
             console.log(userId);
             queryClient.refetchQueries(["profile"]);
             queryClient.refetchQueries(["user", userId]);
+            queryClient.refetchQueries(["feed-posts"]);
 
         },
         onError: (error: AxiosError<{ message: string }>) => {

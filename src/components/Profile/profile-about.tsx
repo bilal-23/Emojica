@@ -1,4 +1,7 @@
-import { useGetProfileQuery } from "@/queries/profileQueries";
+import {
+  useGetMyPostsQuery,
+  useGetProfileQuery,
+} from "@/queries/profileQueries";
 import { Avatar, AvatarImage, AvatarFallback } from "../UI/avatar";
 import { Loader } from "../UI/loader";
 
@@ -6,9 +9,12 @@ interface Props {
   isProfile: boolean;
 }
 const ProfileAbout: React.FC<Props> = ({ isProfile }) => {
+  const { isLoading: isPostsLoading, data: posts } = useGetMyPostsQuery();
   const { isLoading, data } = useGetProfileQuery();
 
-  if (isLoading && !data) {
+  console.log(posts);
+
+  if ((isLoading && !data) || isPostsLoading) {
     return (
       <header className="flex flex-wrap items-center p-4 md:py-8 bg-white rounded-lg">
         <Loader />
@@ -71,7 +77,7 @@ const ProfileAbout: React.FC<Props> = ({ isProfile }) => {
           {/* <!-- post, following, followers list for medium screens --> */}
           <ul className="hidden md:flex space-x-4 mb-4">
             <li>
-              <span className="font-semibold">0 </span>
+              <span className="font-semibold">{posts?.length} </span>
               posts
             </li>
 
@@ -107,7 +113,9 @@ const ProfileAbout: React.FC<Props> = ({ isProfile }) => {
         text-center p-2 text-gray-600 leading-snug text-sm"
           >
             <li>
-              <span className="font-semibold text-gray-800 block">0 </span>
+              <span className="font-semibold text-gray-800 block">
+                {posts?.length}{" "}
+              </span>
               posts
             </li>
 

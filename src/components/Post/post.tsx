@@ -4,50 +4,74 @@ import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-const Post = () => {
+interface Props {
+  authorName: string;
+  authorId: string;
+  authorAvatar: string;
+  authorUsername: string;
+  authorAvatarFallback: string;
+  content: string;
+  image?: string;
+  commentsCount: number;
+  likesCount: number;
+  postId: string;
+  updatedAt: string;
+}
+const Post: React.FC<Props> = ({
+  authorName,
+  authorAvatar,
+  authorId,
+  authorUsername,
+  authorAvatarFallback,
+  commentsCount,
+  content,
+  image,
+  likesCount,
+  postId,
+  updatedAt,
+}) => {
   const router = useRouter();
   const handleCommentSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push("/post/1");
+    router.push(`/post/${postId}`);
   };
 
   return (
     <div className="bg-white shadow rounded-lg mt-2 sm:mt-5">
       <div className="flex flex-row px-2 py-3 mx-3">
-        <Link href="/user/1">
-          <Avatar className=" border-2 border-green-500 w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center ">
-            <AvatarImage src="/" />
-            <AvatarFallback>BM</AvatarFallback>
+        <Link href={`/user/${authorId}`}>
+          <Avatar className=" border-2  w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center ">
+            <AvatarImage src={authorAvatar} />
+            <AvatarFallback>{authorAvatarFallback}</AvatarFallback>
           </Avatar>
         </Link>
         <div className="flex flex-col mb-2 ml-4 mt-1">
-          <Link href="/user/1">
+          <Link href={`/user/${authorId}`}>
             <div className="text-gray-600 text-sm font-semibold">
-              Sara LaurenL
+              {authorName}
             </div>
           </Link>
           <div className="flex w-full mt-1">
-            <Link href="/user/1">
+            <Link href={`/user/${authorId}`}>
               <div className="text-blue-700 font-base text-xs mr-1 cursor-pointer">
-                UX Design lL
+                @{authorUsername}
               </div>
             </Link>
-            <div className="text-gray-400 font-thin text-xs">• 1 day ago</div>
+            {/* <div className="text-gray-400 font-thin text-xs">{1 day ago}</div> */}
           </div>
         </div>
       </div>
       <div className="border-b border-gray-100"></div>
-      <div className="text-gray-400 font-medium text-sm mb-7 mt-6 mx-3 px-2">
-        <img className="rounded w-full" src="https://picsum.photos/536/354" />
-      </div>
-      <div className="text-gray-600 font-semibold  mb-2 mx-3 px-2">
-        Dummy text of the printing and typesetting industry
-      </div>
-      <div className="text-gray-500 text-sm mb-6 mx-3 px-2">
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry's standard dummy text ever
-        since the 1500
-      </div>
+      <Link href={`/post/${postId}`}>
+        {image && (
+          <div className="text-gray-400 font-medium text-sm mb-7 mt-6 mx-3 px-2">
+            <img className="rounded w-full" src={image} />
+          </div>
+        )}
+        <div className="text-gray-500 text-sm mt-5 mb-6 mx-3 px-2">
+          {content}
+        </div>
+      </Link>
       <div className="flex justify-start mb-4 border-t border-gray-100">
         <div className="flex w-full mt-1 pt-2 pl-5">
           <span className="bg-white transition ease-out duration-300 hover:text-red-500 border w-8 h-8 px-2 pt-2 text-center rounded-full text-gray-400 cursor-pointer mr-2">
@@ -105,16 +129,19 @@ const Post = () => {
       </div>
       <div className="flex w-full border-t border-gray-100 justify-between gap-2">
         <div className="mt-3 mx-2 xs:mx-5 flex flex-row text-xs">
-          <Link href="/post/1">
+          <Link href={`/post/${postId}`}>
             <div className="flex text-gray-700 font-normal rounded-md mb-2 xs:mr-4 items-center cursor-pointer hover:text-blue-500">
               Comments:
-              <div className="ml-1 text-gray-400 text-ms font-semibold">30</div>
+              <div className="ml-1 text-gray-400 text-ms font-semibold">
+                {commentsCount}
+              </div>
             </div>
           </Link>
         </div>
         <div className="mt-3 xs:mx-5 w-full flex justify-end text-xs">
           <div className="flex text-gray-700  rounded-md mb-2 mr-4 items-center">
-            Likes: <div className="ml-1 text-gray-400 text-ms"> 120k</div>
+            Likes:{" "}
+            <div className="ml-1 text-gray-400 text-ms">{likesCount}</div>
           </div>
         </div>
       </div>

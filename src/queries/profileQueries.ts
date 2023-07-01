@@ -20,7 +20,7 @@ export const useGetProfileQuery = () => useQuery({
 export const useGetMyPostsQuery = () => useQuery({
     queryKey: ["myPosts"],
     queryFn: async () => {
-        const response = await axios.get<{ posts: any[] }>("/api/user/my-posts");
+        const response = await axios.get<{ posts: Post[] }>("/api/user/my-posts");
         return response.data.posts;
     },
     onError: (error: AxiosError<{ message: string }>) => {

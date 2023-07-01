@@ -1,16 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useGetProfileQuery } from "@/queries/profileQueries";
+import { useCreatePostMutation } from "@/queries/postQueries";
+import { Loader } from "../UI/loader";
 
 const CreatePost = () => {
-  const { isLoading, data } = useGetProfileQuery();
-  const name =
-    data && data?.firstName.split("")[0] + data?.lastName.split("")[0];
+  const { mutate: createPost, isLoading } = useCreatePostMutation();
+  const [message, setMessage] = useState("");
+
+  const handleCreatePost = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (message.length === 0) return;
+    try {
+      createPost({ content: message });
+      setMessage("");
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div>
-      <form className=" bg-white shadow rounded-lg mb-6 p-4 w-full">
+      {isLoading && <Loader />}
+      <form
+        className=" bg-white shadow rounded-lg mb-6 p-4 w-full"
+        onSubmit={handleCreatePost}
+      >
         <textarea
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
           name="message"
           placeholder="Type something..."
           className=" focus:outline-none  w-full rounded-lg p-2 text-sm bg-gray-100 border border-transparent appearance-none rounded-tg placeholder-gray-400"

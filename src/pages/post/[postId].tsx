@@ -12,7 +12,7 @@ interface PostProps {
 const Post: React.FC<PostProps> = ({ postId }) => {
   return (
     <div className="flex flex-col pt-5 w-full px-2">
-      <PostDetail />
+      <PostDetail id={postId} />
     </div>
   );
 };

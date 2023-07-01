@@ -23,7 +23,7 @@ const Aside = () => {
       <div className="flex flex-col align-center justify-center">
         <div className="p-2 flex justify-start ">
           <Link
-            href="#"
+            href="/"
             className={`relative flex flex-row items-center h-11 focus:outline-none  text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6 ${
               asPath === "/" && "text-indigo-500 font-semibold"
             }

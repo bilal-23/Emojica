@@ -57,10 +57,10 @@ const Register = () => {
         setFormData((p) => ({ ...p, lastName: value }));
         break;
       case "email":
-        setFormData((p) => ({ ...p, email: value }));
+        setFormData((p) => ({ ...p, email: value.toLowerCase() }));
         break;
       case "username":
-        setFormData((p) => ({ ...p, username: value }));
+        setFormData((p) => ({ ...p, username: value.toLowerCase() }));
         break;
       case "password":
         setFormData((p) => ({ ...p, password: value }));

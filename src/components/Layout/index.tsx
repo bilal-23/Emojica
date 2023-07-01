@@ -4,8 +4,6 @@ import { fontSans } from "@/lib/font";
 import Navbar from "./navbar";
 import { useRouter } from "next/router";
 import MobileNav from "./mobile-nav";
-import { useSession } from "next-auth/react";
-import { useGetProfileQuery } from "@/queries/profileQueries";
 import Aside from "./Aside";
 import UserSuggestions from "../Homepage/user-suggestions";
 
@@ -14,7 +12,6 @@ interface Props {
 }
 const Layout: React.FC<Props> = ({ children }) => {
   const router = useRouter();
-  const { isLoading, isError, data } = useGetProfileQuery();
 
   return (
     <>

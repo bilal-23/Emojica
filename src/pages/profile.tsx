@@ -1,9 +1,9 @@
-import About from "@/components/Profile/about";
 import ProfilePosts from "@/components/Profile/profile-posts";
 import { GetServerSideProps, NextPage } from "next";
 import { getServerSession } from "next-auth";
 import React from "react";
 import { authOptions } from "./api/auth/[...nextauth]";
+import ProfileAbout from "@/components/Profile/profile-about";
 
 interface Props {
   bookmarks: boolean;
@@ -11,7 +11,7 @@ interface Props {
 const Profile: NextPage<Props> = ({ bookmarks }) => {
   return (
     <div className="w-full pb-10 pt-5 px-2">
-      <About isProfile={true} />
+      <ProfileAbout isProfile={true} />
       <ProfilePosts showBookmarks={bookmarks} />
     </div>
   );

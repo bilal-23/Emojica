@@ -1,15 +1,18 @@
-import About from "@/components/Profile/about";
 import UserPosts from "@/components/Profile/user-posts";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import React from "react";
 import { authOptions } from "../api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
+import UserAbout from "@/components/Profile/user-about";
 
-const User = () => {
+interface Props {
+  id: string;
+}
+const User: NextPage<Props> = ({ id }) => {
   return (
     <div className="w-full py-10 px-2">
-      <About isProfile={false} />
-      <UserPosts />
+      <UserAbout id={id} />
+      <UserPosts id={id} />
     </div>
   );
 };
@@ -32,6 +35,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       session,
+      id: userId,
     },
   };
 };

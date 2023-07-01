@@ -1,6 +1,7 @@
 import { User } from "@/models/user";
 import { connectMongoDB } from '@/lib/mongoConnect';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { hashPassword } from "@/lib/hashPassword";
 
 const avatars = [
     "https://ik.imagekit.io/averno2301/Emojica/User_Avatar/pikachu_RVvSDjez36.png",
@@ -43,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (userUsername) {
             return res.status(400).json({ message: 'Username not available', id: "username" });
         }
-
+        const hashedPassword = await hashPassword(password);
         // Create a new user object
         const newUser = new User({
             firstName,
@@ -51,7 +52,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             username,
             email,
             pic: avatars[Math.floor(Math.random() * avatars.length)],
-            password,
+            password: hashedPassword
         });
 
         // Save the user to the database

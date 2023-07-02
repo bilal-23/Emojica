@@ -90,7 +90,9 @@ export const useDeletePostMutation = (postId: string) => {
             queryClient.invalidateQueries(["bookmarks"])
             queryClient.invalidateQueries(["all-posts"]); // Invalidate the user query
             toast.success("Post deleted successfully");
-            router.push("/");
+            if (router.pathname === `/post/${postId}`) {
+                router.push("/");
+            }
         }
     });
 }

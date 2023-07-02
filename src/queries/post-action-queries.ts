@@ -38,3 +38,36 @@ export const useUnlikePostMutation = (postId: string) => {
         }
     });
 }
+
+
+// Bookmark post
+export const useBookmarkPostMutation = (postId: string) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationKey: ["bookmarkPost", postId],
+        mutationFn: async () => {
+            const res = await axios.post(`/api/post/bookmark/${postId}`);
+            return res.data;
+        },
+        onSuccess: () => {
+            queryClient.refetchQueries(["bookmarks"])
+        }
+    });
+}
+
+// Unbookmark post
+export const useUnbookmarkPostMutation = (postId: string) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationKey: ["unbookmarkPost", postId],
+        mutationFn: async () => {
+            const res = await axios.delete(`/api/post/bookmark/${postId}`);
+            return res.data;
+        },
+        onSuccess: () => {
+            queryClient.refetchQueries(["bookmarks"])
+        }
+    });
+}

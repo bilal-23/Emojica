@@ -5,9 +5,12 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useGetSession } from "@/hooks/use-session";
 import {
+  useBookmarkPostMutation,
   useLikePostMutation,
+  useUnbookmarkPostMutation,
   useUnlikePostMutation,
 } from "@/queries/post-action-queries";
+import { useGetBookmarksQuery } from "@/queries/profileQueries";
 
 interface Props {
   authorName: string;
@@ -39,16 +42,27 @@ const Post: React.FC<Props> = ({
 }) => {
   const router = useRouter();
   const sessionUserId = useGetSession();
+  const { data: bookmarkedPosts } = useGetBookmarksQuery();
   const { mutate: likePost } = useLikePostMutation(postId);
   const { mutate: unlikePost } = useUnlikePostMutation(postId);
+  const { mutate: bookmark } = useBookmarkPostMutation(postId);
+  const { mutate: unbookmark } = useUnbookmarkPostMutation(postId);
 
   const isLiked = likedBy.includes(sessionUserId);
-
+  const isBookmarked = bookmarkedPosts?.find((post) => post._id === postId);
   const handleLikeUnlike = () => {
     if (isLiked) {
       unlikePost();
     } else {
       likePost();
+    }
+  };
+
+  const handleBookmark = () => {
+    if (isBookmarked) {
+      unbookmark();
+    } else {
+      bookmark();
     }
   };
 
@@ -103,8 +117,13 @@ const Post: React.FC<Props> = ({
       </Link>
       <div className="flex justify-start mb-4 border-t border-gray-100">
         <div className="flex w-full mt-1 pt-2 pl-5">
-          <span className="bg-white transition ease-out duration-300 hover:text-red-500 border w-8 h-8 px-2 pt-2 text-center rounded-full text-gray-400 cursor-pointer mr-2">
+          {/* Bookmark */}
+          <span
+            className="bg-white transition ease-out duration-300 hover:text-red-500 border w-8 h-8 px-2 pt-2 text-center rounded-full text-gray-400 cursor-pointer mr-2"
+            onClick={handleBookmark}
+          >
             <svg
+              className={`text-blue-500 ${isBookmarked ? "fill-blue-500" : ""}`}
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               width="14px"

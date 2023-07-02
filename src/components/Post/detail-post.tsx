@@ -276,7 +276,7 @@ const PostDetail: React.FC<Props> = ({ id }) => {
             </div>
           </div>
           {/* COmmetns */}
-          <form className="w-full relative flex items-center self-center  p-4 overflow-hidden text-gray-600 focus-within:text-gray-400">
+          {/* <form className="w-full relative flex items-center self-center  p-4 overflow-hidden text-gray-600 focus-within:text-gray-400">
             <Link href={"/profile"}>
               <Avatar className="w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center shadow-inner border">
                 <AvatarImage src="/" />
@@ -289,8 +289,8 @@ const PostDetail: React.FC<Props> = ({ id }) => {
               placeholder="Post a comment..."
               autoComplete="off"
             />
-          </form>
-          <div className="flex w-full flex-col border-t border-gray-100">
+          </form> */}
+          {/* <div className="flex w-full flex-col border-t border-gray-100">
             {post?.comments.map((comment) => {
               return (
                 <div className="w-full relative flex gap-2 items-start self-center  p-4 overflow-hidden text-gray-600 ">
@@ -319,7 +319,7 @@ const PostDetail: React.FC<Props> = ({ id }) => {
                 </div>
               );
             })}
-          </div>
+          </div> */}
         </div>
       )}
     </>

@@ -88,7 +88,11 @@ const MobileNav = () => {
                 <Avatar
                   className="shadow-inner border-2"
                   style={{
-                    border: asPath === "/profile" ? "2px solid #6366F1" : "",
+                    border:
+                      asPath === "/profile" ||
+                      asPath === "/profile?bookmarks=false"
+                        ? "2px solid #6366F1"
+                        : "",
                   }}
                 >
                   <AvatarImage src={data?.pic} />

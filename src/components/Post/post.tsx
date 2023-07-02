@@ -251,7 +251,7 @@ const Post: React.FC<Props> = ({
           </div>
         </div>
       </div>
-      <form
+      {/* <form
         className="w-full relative flex items-center self-center  p-4 overflow-hidden text-gray-600 focus-within:text-gray-400"
         onSubmit={handleCommentSubmit}
       >
@@ -267,7 +267,7 @@ const Post: React.FC<Props> = ({
           placeholder="Post a comment..."
           autoComplete="off"
         />
-      </form>
+      </form> */}
     </div>
   );
 };

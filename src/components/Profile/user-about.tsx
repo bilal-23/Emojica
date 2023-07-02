@@ -136,7 +136,9 @@ const UserAbout: React.FC<Props> = ({ id }) => {
         text-center p-2 text-gray-600 leading-snug text-sm"
           >
             <li>
-              <span className="font-semibold text-gray-800 block">0 </span>
+              <span className="font-semibold text-gray-800 block">
+                {userPosts?.length}{" "}
+              </span>
               posts
             </li>
 

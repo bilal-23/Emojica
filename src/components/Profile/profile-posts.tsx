@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/UI/tabs";
 import Post from "@/components/Post/post";
 import { useGetBookmarksQuery } from "@/queries/profileQueries";
 import { Loader } from "../UI/loader";
 import { useGetAllPostsQuery } from "@/queries/postQueries";
 import { useGetSession } from "@/hooks/use-session";
+import { useRouter } from "next/router";
 
 interface Props {
   showBookmarks: boolean;
@@ -14,7 +15,21 @@ const ProfilePosts: React.FC<Props> = ({ showBookmarks }) => {
   const { isLoading: isPostsLoading, data: posts } = useGetAllPostsQuery();
   const { isLoading: isBookmarkLoading, data: bookmarks } =
     useGetBookmarksQuery();
+  const [tabSelected, setTabSelected] = useState<"posts" | "bookmarks">(
+    showBookmarks ? "bookmarks" : "posts"
+  );
+  const router = useRouter();
   const myPosts = posts?.filter((post) => post.author._id === sessionUserId);
+
+  useEffect(() => {
+    if (router.query.bookmarks) {
+      if (router.query.bookmarks === "true") {
+        setTabSelected("bookmarks");
+      } else {
+        setTabSelected("posts");
+      }
+    }
+  }, [router.query]);
 
   // If the bookmarks are loading, show the loader
   if (isBookmarkLoading || isPostsLoading) {
@@ -22,15 +37,30 @@ const ProfilePosts: React.FC<Props> = ({ showBookmarks }) => {
   }
 
   return (
-    <Tabs
-      defaultValue={showBookmarks ? "bookmarks" : "posts"}
-      className="w-full"
-    >
+    <Tabs defaultValue={tabSelected} className="w-full">
       <TabsList className="w-full flex">
-        <TabsTrigger value="posts" className="flex-1">
+        <TabsTrigger
+          value="posts"
+          className="flex-1"
+          onClick={() => {
+            router.push({
+              pathname: router.pathname,
+              query: { bookmarks: false },
+            });
+          }}
+        >
           Posts
         </TabsTrigger>
-        <TabsTrigger value="bookmarks" className="flex-1">
+        <TabsTrigger
+          value="bookmarks"
+          className="flex-1"
+          onClick={() => {
+            router.push({
+              pathname: router.pathname,
+              query: { bookmarks: true },
+            });
+          }}
+        >
           Bookmarks
         </TabsTrigger>
       </TabsList>

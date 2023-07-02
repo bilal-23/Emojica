@@ -16,7 +16,6 @@ const ProfileAbout: React.FC<Props> = ({ isProfile }) => {
   const { isLoading, data } = useGetProfileQuery();
 
   const myPosts = posts?.filter((post) => post.author._id === sessionUserId);
-
   if ((isLoading && !data) || isPostsLoading) {
     return (
       <header className="flex flex-wrap items-center p-4 md:py-8 bg-white rounded-lg">
@@ -125,7 +124,7 @@ const ProfileAbout: React.FC<Props> = ({ isProfile }) => {
             >
               <li>
                 <span className="font-semibold text-gray-800 block">
-                  {posts?.length}{" "}
+                  {myPosts?.length}{" "}
                 </span>
                 posts
               </li>

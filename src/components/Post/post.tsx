@@ -39,7 +39,7 @@ interface Props {
   likesCount: number;
   likedBy: string[];
   postId: string;
-  updatedAt: string;
+  updatedAt: Date;
 }
 const Post: React.FC<Props> = ({
   authorName,

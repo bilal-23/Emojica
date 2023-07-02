@@ -13,7 +13,8 @@ export const useGetAllUserQuery = () => useQuery({
     staleTime: 1000 * 60 * 5,// 5 minutes
     onError: (error: AxiosError<{ message: string }>) => {
         toast.error(error.response?.data.message);
-    }
+    },
+    refetchOnMount: true
 })
 
 // Get Single User Detail
@@ -22,7 +23,9 @@ export const useGetUserQuery = (userId: string) => useQuery({
     queryFn: async () => {
         const response = await axios.get<{ user: allUsers }>(`/api/user/${userId}`);
         return response.data.user;
-    }
+    },
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    refetchOnMount: true
 });
 
 // Get All Post of a User
@@ -34,5 +37,7 @@ export const useGetUserPostQuery = (userId: string) => useQuery({
     },
     onError: (error: AxiosError<{ message: string }>) => {
         toast.error("Something went wrong while fetching user posts, please try loading the page again")
-    }
+    },
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    refetchOnMount: true
 });

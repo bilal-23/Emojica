@@ -1,5 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 // Like a post
 export const useLikePostMutation = (postId: string) => {
@@ -51,7 +53,8 @@ export const useBookmarkPostMutation = (postId: string) => {
             return res.data;
         },
         onSuccess: () => {
-            queryClient.refetchQueries(["bookmarks"])
+            queryClient.refetchQueries(["bookmarks"]);
+            toast.success("Post bookmarked");
         }
     });
 }
@@ -67,7 +70,30 @@ export const useUnbookmarkPostMutation = (postId: string) => {
             return res.data;
         },
         onSuccess: () => {
-            queryClient.refetchQueries(["bookmarks"])
+            queryClient.refetchQueries(["bookmarks"]);
+            toast.success("Post unbookmarked");
+        },
+    });
+}
+
+// Delete post	
+export const useDeletePostMutation = (postId: string) => {
+    const queryClient = useQueryClient();
+    const router = useRouter();
+
+    return useMutation({
+        mutationKey: ["deletePost", postId],
+        mutationFn: async () => {
+            const res = await axios.delete(`/api/post/${postId}`);
+            return res.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(["feed-posts"]); // Invalidate the feed posts query
+            queryClient.invalidateQueries(["bookmarks"])
+            queryClient.invalidateQueries(["myPosts"]); // Invalidate the my posts query
+            queryClient.invalidateQueries(["all-posts"]); // Invalidate the user query
+            toast.success("Post deleted successfully");
+            router.push("/");
         }
     });
 }

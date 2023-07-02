@@ -40,7 +40,9 @@ export const useGetPostQuery = (postId: string) => useQuery({
     queryFn: async () => {
         const response = await axios.get<{ post: PostDetail }>(`/api/post/${postId}`);
         return response.data.post;
-    }
+    },
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    refetchOnMount: true
 });
 
 // Get Feed Posts
@@ -49,5 +51,7 @@ export const useGetFeedPostsQuery = () => useQuery({
     queryFn: async () => {
         const response = await axios.get<{ feedPosts: Post[] }>(`/api/post/my-feed`);
         return response.data.feedPosts;
-    }
+    },
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    refetchOnMount: true
 });

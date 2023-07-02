@@ -20,23 +20,35 @@ import { useGetPostQuery } from "@/queries/postQueries";
 import { Loader } from "../UI/loader";
 import { useGetSession } from "@/hooks/use-session";
 import {
+  useBookmarkPostMutation,
+  useDeletePostMutation,
   useLikePostMutation,
+  useUnbookmarkPostMutation,
   useUnlikePostMutation,
 } from "@/queries/post-action-queries";
+import { comment } from "postcss";
+import { useGetBookmarksQuery } from "@/queries/profileQueries";
 
 interface Props {
   id: string;
 }
 const PostDetail: React.FC<Props> = ({ id }) => {
   const sessionUserId = useGetSession();
+  const { data: bookmarkedPosts } = useGetBookmarksQuery();
   const { isLoading, data: post } = useGetPostQuery(id);
   const { mutate: likePost } = useLikePostMutation(id);
   const { mutate: unlikePost } = useUnlikePostMutation(id);
+  const { mutate: bookmark } = useBookmarkPostMutation(id);
+  const { mutate: unbookmark } = useUnbookmarkPostMutation(id);
+  const { isLoading: isDeleting, mutate: deletePost } =
+    useDeletePostMutation(id);
   const router = useRouter();
 
   const isLiked = post?.likes.likedBy.find(
     (item) => item._id === sessionUserId
   );
+
+  const isBookmarked = bookmarkedPosts?.find((post) => post._id === id);
 
   const handleLikeUnlike = () => {
     if (isLiked) {
@@ -48,9 +60,22 @@ const PostDetail: React.FC<Props> = ({ id }) => {
     }
   };
 
+  const handleBookmark = () => {
+    if (isBookmarked) {
+      unbookmark();
+    } else {
+      bookmark();
+    }
+  };
+
+  const handleDeletePost = () => {
+    deletePost();
+  };
+
   return (
     <>
       {isLoading && <Loader />}
+      {isDeleting && <Loader />}
       {post && (
         <div className="bg-white shadow rounded-lg mt-2 sm:mt-5 mb-5">
           <div className="bg-white py-2 px-2 mx-2 flex items-center">
@@ -60,35 +85,25 @@ const PostDetail: React.FC<Props> = ({ id }) => {
               onClick={() => router.back()}
             />
           </div>
-          <div className="flex flex-row px-2 py-3 mx-3">
-            <Link
-              href={`/user/${
-                post?.author._id === sessionUserId
-                  ? "profile"
-                  : post?.author._id
-              }`}
-              className="flex items-center"
-            >
-              <Avatar className=" border-2  w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center ">
-                <AvatarImage src={post?.author.pic} />
-                <AvatarFallback>
-                  {post && post?.author.firstName[0] + post?.author.lastName[0]}
-                </AvatarFallback>
-              </Avatar>
-            </Link>
-            <div className="flex flex-col mb-2 ml-4 mt-1">
+          <div className="flex flex-row justify-between px-2 py-3 mx-3">
+            <div className="flex flex-row">
               <Link
                 href={`/user/${
                   post?.author._id === sessionUserId
                     ? "profile"
                     : post?.author._id
                 }`}
+                className="flex items-center"
               >
-                <div className="text-gray-600 text-sm font-semibold">
-                  {post?.author.firstName + " " + post?.author.lastName}
-                </div>
+                <Avatar className=" border-2  w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center ">
+                  <AvatarImage src={post?.author.pic} />
+                  <AvatarFallback>
+                    {post &&
+                      post?.author.firstName[0] + post?.author.lastName[0]}
+                  </AvatarFallback>
+                </Avatar>
               </Link>
-              <div className="flex w-full mt-1">
+              <div className="flex flex-col mb-2 ml-4 mt-1">
                 <Link
                   href={`/user/${
                     post?.author._id === sessionUserId
@@ -96,13 +111,41 @@ const PostDetail: React.FC<Props> = ({ id }) => {
                       : post?.author._id
                   }`}
                 >
-                  <div className="text-blue-700 font-base text-xs mr-1 cursor-pointer">
-                    @{post?.author.username}
+                  <div className="text-gray-600 text-sm font-semibold">
+                    {post?.author.firstName + " " + post?.author.lastName}
                   </div>
                 </Link>
-                {/* <div className="text-gray-400 font-thin text-xs">• 1 day ago</div> */}
+                <div className="flex w-full mt-1">
+                  <Link
+                    href={`/user/${
+                      post?.author._id === sessionUserId
+                        ? "profile"
+                        : post?.author._id
+                    }`}
+                  >
+                    <div className="text-blue-700 font-base text-xs mr-1 cursor-pointer">
+                      @{post?.author.username}
+                    </div>
+                  </Link>
+                  {/* <div className="text-gray-400 font-thin text-xs">• 1 day ago</div> */}
+                </div>
               </div>
             </div>
+            {sessionUserId === post.author._id && (
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <div className="h-auto w-[20px] ">
+                    <FontAwesomeIcon icon={faEllipsisVertical} />
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem>Edit Caption</DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleDeletePost}>
+                    Delete Post
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </div>
           <div className="border-b border-gray-100"></div>
           {post?.imageUrl && (
@@ -117,8 +160,15 @@ const PostDetail: React.FC<Props> = ({ id }) => {
           )}
           <div className="flex justify-start mb-4 border-t border-gray-100">
             <div className="flex w-full mt-1 pt-2 pl-5">
-              <span className="bg-white transition ease-out duration-300 hover:text-red-500 border w-8 h-8 px-2 pt-2 text-center rounded-full text-gray-400 cursor-pointer mr-2">
+              {/* Bookmark */}
+              <span
+                className="bg-white transition ease-out duration-300 hover:text-red-500 border w-8 h-8 px-2 pt-2 text-center rounded-full text-gray-400 cursor-pointer mr-2"
+                onClick={handleBookmark}
+              >
                 <svg
+                  className={`text-blue-500 ${
+                    isBookmarked ? "fill-blue-500" : ""
+                  }`}
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   width="14px"

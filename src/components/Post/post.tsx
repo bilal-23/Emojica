@@ -5,12 +5,23 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useGetSession } from "@/hooks/use-session";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/UI/dropdown-menu";
+import {
   useBookmarkPostMutation,
+  useDeletePostMutation,
   useLikePostMutation,
   useUnbookmarkPostMutation,
   useUnlikePostMutation,
 } from "@/queries/post-action-queries";
 import { useGetBookmarksQuery } from "@/queries/profileQueries";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
   authorName: string;
@@ -47,6 +58,7 @@ const Post: React.FC<Props> = ({
   const { mutate: unlikePost } = useUnlikePostMutation(postId);
   const { mutate: bookmark } = useBookmarkPostMutation(postId);
   const { mutate: unbookmark } = useUnbookmarkPostMutation(postId);
+  const { mutate: deletePost } = useDeletePostMutation(postId);
 
   const isLiked = likedBy.includes(sessionUserId);
   const isBookmarked = bookmarkedPosts?.find((post) => post._id === postId);
@@ -73,36 +85,55 @@ const Post: React.FC<Props> = ({
 
   return (
     <div className="bg-white shadow rounded-lg mt-2 sm:mt-5">
-      <div className="flex flex-row px-2 py-3 mx-3">
-        <Link
-          href={`/user/${authorId === sessionUserId ? "profile" : authorId}`}
-        >
-          <Avatar className=" border-2  w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center ">
-            <AvatarImage src={authorAvatar} />
-            <AvatarFallback>{authorAvatarFallback}</AvatarFallback>
-          </Avatar>
-        </Link>
-        <div className="flex flex-col mb-2 ml-4 mt-1">
+      <div className="flex flex-row justify-between px-2 py-3 mx-3">
+        <div className="flex flex-row">
           <Link
             href={`/user/${authorId === sessionUserId ? "profile" : authorId}`}
           >
-            <div className="text-gray-600 text-sm font-semibold">
-              {authorName}
-            </div>
+            <Avatar className=" border-2  w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center ">
+              <AvatarImage src={authorAvatar} />
+              <AvatarFallback>{authorAvatarFallback}</AvatarFallback>
+            </Avatar>
           </Link>
-          <div className="flex w-full mt-1">
+          <div className="flex flex-col mb-2 ml-4 mt-1">
             <Link
               href={`/user/${
                 authorId === sessionUserId ? "profile" : authorId
               }`}
             >
-              <div className="text-blue-700 font-base text-xs mr-1 cursor-pointer">
-                @{authorUsername}
+              <div className="text-gray-600 text-sm font-semibold">
+                {authorName}
               </div>
             </Link>
-            {/* <div className="text-gray-400 font-thin text-xs">{1 day ago}</div> */}
+            <div className="flex w-full mt-1">
+              <Link
+                href={`/user/${
+                  authorId === sessionUserId ? "profile" : authorId
+                }`}
+              >
+                <div className="text-blue-700 font-base text-xs mr-1 cursor-pointer">
+                  @{authorUsername}
+                </div>
+              </Link>
+              {/* <div className="text-gray-400 font-thin text-xs">{1 day ago}</div> */}
+            </div>
           </div>
         </div>
+        {sessionUserId === authorId && (
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <div className="h-auto w-[20px] ">
+                <FontAwesomeIcon icon={faEllipsisVertical} />
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem>Edit Caption</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => deletePost()}>
+                Delete Post
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
       <div className="border-b border-gray-100"></div>
       <Link href={`/post/${postId}`}>

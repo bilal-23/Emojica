@@ -26,7 +26,9 @@ export const useGetMyPostsQuery = () => useQuery({
     },
     onError: (error: AxiosError<{ message: string }>) => {
         toast.error(error.response?.data.message);
-    }
+    },
+    staleTime: 1000 * 30, // 30 seconds
+    refetchOnMount: true
 });
 
 // get all the bookmark post of the user
@@ -38,7 +40,9 @@ export const useGetBookmarksQuery = () => useQuery({
     },
     onError: (error: AxiosError<{ message: string }>) => {
         toast.error(error.response?.data.message);
-    }
+    },
+    staleTime: 1000 * 30, // 30 seconds
+    refetchOnMount: true
 })
 
 // Mutate follow user

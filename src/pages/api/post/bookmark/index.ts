@@ -35,7 +35,7 @@ export default async function handler(
         const bookmarkedPosts = await Post.find({ _id: { $in: bookmarks } }).populate([
             { path: "author", select: "_id firstName lastName pic username" },
             { path: "comments.user", select: "_id firstName lastName pic username" },
-        ]);
+        ]).sort({ createdAt: -1 });
 
         if (bookmarkedPosts.length === 0) return res.status(200).json({ bookmarks: [], message: "No bookmarks" });
 

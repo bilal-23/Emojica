@@ -16,7 +16,6 @@ export const useLikePostMutation = (postId: string) => {
         onSuccess: () => {
             queryClient.refetchQueries(["post", postId]); // Invalidate that individual post query
             queryClient.refetchQueries(["feed-posts"]); // Invalidate the feed posts query
-            queryClient.refetchQueries(["myPosts"]); // Invalidate the my posts query
             queryClient.refetchQueries(["all-posts"]); // Invalidate the user query
         }
     });
@@ -35,7 +34,6 @@ export const useUnlikePostMutation = (postId: string) => {
         onSuccess: () => {
             queryClient.refetchQueries(["post", postId]); // Invalidate that individual post query
             queryClient.refetchQueries(["feed-posts"]); // Invalidate the feed posts query
-            queryClient.refetchQueries(["myPosts"]); // Invalidate the my posts query
             queryClient.refetchQueries(["all-posts"]); // Invalidate the user query
         }
     });
@@ -90,10 +88,33 @@ export const useDeletePostMutation = (postId: string) => {
         onSuccess: () => {
             queryClient.invalidateQueries(["feed-posts"]); // Invalidate the feed posts query
             queryClient.invalidateQueries(["bookmarks"])
-            queryClient.invalidateQueries(["myPosts"]); // Invalidate the my posts query
             queryClient.invalidateQueries(["all-posts"]); // Invalidate the user query
             toast.success("Post deleted successfully");
             router.push("/");
+        }
+    });
+}
+
+// Edit Post
+export const useEditPostMutation = (postId: string) => {
+    const queryClient = useQueryClient();
+    const router = useRouter();
+
+    return useMutation({
+        mutationKey: ["editPost", postId],
+        mutationFn: async ({ content }: { content: string }) => {
+            const res = await axios.patch(`/api/post/${postId}`, { content });
+            return true;
+        },
+        onError: () => {
+            toast.error("Something went wrong");
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(["feed-posts"]); // Invalidate the feed posts query
+            queryClient.invalidateQueries(["bookmarks"])
+            queryClient.invalidateQueries(["all-posts"]); // Invalidate the user query
+            queryClient.invalidateQueries(["post", postId]); // Invalidate that individual post query
+            toast.success("Post edited successfully");
         }
     });
 }

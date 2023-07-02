@@ -29,15 +29,15 @@ export const useGetUserQuery = (userId: string) => useQuery({
 });
 
 // Get All Post of a User
-export const useGetUserPostQuery = (userId: string) => useQuery({
-    queryKey: ["user-post", userId],
-    queryFn: async () => {
-        const response = await axios.get<{ posts: any }>(`/api/user/all-posts/${userId}`);
-        return response.data.posts;
-    },
-    onError: (error: AxiosError<{ message: string }>) => {
-        toast.error("Something went wrong while fetching user posts, please try loading the page again")
-    },
-    staleTime: 1000 * 60 * 5, // 5 minutes
-    refetchOnMount: true
-});
+// export const useGetUserPostQuery = (userId: string) => useQuery({
+//     queryKey: ["user-post", userId],
+//     queryFn: async () => {
+//         const response = await axios.get<{ posts: any }>(`/api/user/all-posts/${userId}`);
+//         return response.data.posts;
+//     },
+//     onError: (error: AxiosError<{ message: string }>) => {
+//         toast.error("Something went wrong while fetching user posts, please try loading the page again")
+//     },
+//     staleTime: 1000 * 60 * 5, // 5 minutes
+//     refetchOnMount: true
+// });

@@ -18,18 +18,18 @@ export const useGetProfileQuery = () => useQuery({
 });
 
 // get all post of the current logged in user
-export const useGetMyPostsQuery = () => useQuery({
-    queryKey: ["myPosts"],
-    queryFn: async () => {
-        const response = await axios.get<{ posts: Post[] }>("/api/user/my-posts");
-        return response.data.posts;
-    },
-    onError: (error: AxiosError<{ message: string }>) => {
-        toast.error(error.response?.data.message);
-    },
-    staleTime: 1000 * 30, // 30 seconds
-    refetchOnMount: true
-});
+// export const useGetMyPostsQuery = () => useQuery({
+//     queryKey: ["myPosts"],
+//     queryFn: async () => {
+//         const response = await axios.get<{ posts: Post[] }>("/api/user/my-posts");
+//         return response.data.posts;
+//     },
+//     onError: (error: AxiosError<{ message: string }>) => {
+//         toast.error(error.response?.data.message);
+//     },
+//     staleTime: 1000 * 30, // 30 seconds
+//     refetchOnMount: true
+// });
 
 // get all the bookmark post of the user
 export const useGetBookmarksQuery = () => useQuery({

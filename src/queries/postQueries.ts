@@ -13,7 +13,7 @@ export const useCreatePostMutation = () => {
             return response.data;
         },
         onSuccess: (data) => {
-            queryClient.refetchQueries(["myPosts"]);
+            queryClient.refetchQueries(["all-posts"]);
             queryClient.refetchQueries(["feed-posts"]);
             toast.success("Post created successfully");
         }

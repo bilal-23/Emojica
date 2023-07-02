@@ -1,19 +1,20 @@
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/UI/tabs";
 import Post from "@/components/Post/post";
-import {
-  useGetBookmarksQuery,
-  useGetMyPostsQuery,
-} from "@/queries/profileQueries";
+import { useGetBookmarksQuery } from "@/queries/profileQueries";
 import { Loader } from "../UI/loader";
+import { useGetAllPostsQuery } from "@/queries/postQueries";
+import { useGetSession } from "@/hooks/use-session";
 
 interface Props {
   showBookmarks: boolean;
 }
 const ProfilePosts: React.FC<Props> = ({ showBookmarks }) => {
-  const { isLoading: isPostsLoading, data: posts } = useGetMyPostsQuery();
+  const sessionUserId = useGetSession();
+  const { isLoading: isPostsLoading, data: posts } = useGetAllPostsQuery();
   const { isLoading: isBookmarkLoading, data: bookmarks } =
     useGetBookmarksQuery();
+  const myPosts = posts?.filter((post) => post.author._id === sessionUserId);
 
   // If the bookmarks are loading, show the loader
   if (isBookmarkLoading || isPostsLoading) {
@@ -37,7 +38,7 @@ const ProfilePosts: React.FC<Props> = ({ showBookmarks }) => {
         {posts?.length === 0 ? (
           <p className="text-center mt-5">No Post Yet</p>
         ) : (
-          posts?.map((post) => {
+          myPosts?.map((post) => {
             return (
               <Post
                 key={post._id}

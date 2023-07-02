@@ -1,16 +1,18 @@
-import {
-  useGetMyPostsQuery,
-  useGetProfileQuery,
-} from "@/queries/profileQueries";
+import { useGetProfileQuery } from "@/queries/profileQueries";
 import { Avatar, AvatarImage, AvatarFallback } from "../UI/avatar";
 import { Loader } from "../UI/loader";
+import { useGetAllPostsQuery } from "@/queries/postQueries";
+import { useGetSession } from "@/hooks/use-session";
 
 interface Props {
   isProfile: boolean;
 }
 const ProfileAbout: React.FC<Props> = ({ isProfile }) => {
-  const { isLoading: isPostsLoading, data: posts } = useGetMyPostsQuery();
+  const sessionUserId = useGetSession();
+  const { isLoading: isPostsLoading, data: posts } = useGetAllPostsQuery();
   const { isLoading, data } = useGetProfileQuery();
+
+  const myPosts = posts?.filter((post) => post.author._id === sessionUserId);
 
   if ((isLoading && !data) || isPostsLoading) {
     return (
@@ -75,7 +77,7 @@ const ProfileAbout: React.FC<Props> = ({ isProfile }) => {
           {/* <!-- post, following, followers list for medium screens --> */}
           <ul className="hidden md:flex space-x-4 mb-4">
             <li>
-              <span className="font-semibold">{posts?.length} </span>
+              <span className="font-semibold">{myPosts?.length} </span>
               posts
             </li>
 

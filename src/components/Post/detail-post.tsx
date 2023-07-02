@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Avatar } from "../UI/avatar";
 import {
   DropdownMenu,
@@ -22,12 +22,14 @@ import { useGetSession } from "@/hooks/use-session";
 import {
   useBookmarkPostMutation,
   useDeletePostMutation,
+  useEditPostMutation,
   useLikePostMutation,
   useUnbookmarkPostMutation,
   useUnlikePostMutation,
 } from "@/queries/post-action-queries";
-import { comment } from "postcss";
 import { useGetBookmarksQuery } from "@/queries/profileQueries";
+import EditPost from "./edit-post";
+import { Dialog, DialogTrigger } from "@/components/UI/dialog";
 
 interface Props {
   id: string;
@@ -40,9 +42,18 @@ const PostDetail: React.FC<Props> = ({ id }) => {
   const { mutate: unlikePost } = useUnlikePostMutation(id);
   const { mutate: bookmark } = useBookmarkPostMutation(id);
   const { mutate: unbookmark } = useUnbookmarkPostMutation(id);
+  const { isLoading: isEditing, mutate: editPost } = useEditPostMutation(id);
   const { isLoading: isDeleting, mutate: deletePost } =
     useDeletePostMutation(id);
+  const [message, setMessage] = useState("");
+  const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    if (post) {
+      setMessage(post.content);
+    }
+  }, [post]);
 
   const isLiked = post?.likes.likedBy.find(
     (item) => item._id === sessionUserId
@@ -72,10 +83,15 @@ const PostDetail: React.FC<Props> = ({ id }) => {
     deletePost();
   };
 
+  const handleEditPost = () => {
+    editPost({ content: message });
+  };
+
   return (
     <>
       {isLoading && <Loader />}
       {isDeleting && <Loader />}
+      {isEditing && <Loader />}
       {post && (
         <div className="bg-white shadow rounded-lg mt-2 sm:mt-5 mb-5">
           <div className="bg-white py-2 px-2 mx-2 flex items-center">
@@ -88,10 +104,10 @@ const PostDetail: React.FC<Props> = ({ id }) => {
           <div className="flex flex-row justify-between px-2 py-3 mx-3">
             <div className="flex flex-row">
               <Link
-                href={`/user/${
+                href={`${
                   post?.author._id === sessionUserId
                     ? "profile"
-                    : post?.author._id
+                    : "/user/" + post?.author._id
                 }`}
                 className="flex items-center"
               >
@@ -105,10 +121,10 @@ const PostDetail: React.FC<Props> = ({ id }) => {
               </Link>
               <div className="flex flex-col mb-2 ml-4 mt-1">
                 <Link
-                  href={`/user/${
+                  href={`${
                     post?.author._id === sessionUserId
                       ? "profile"
-                      : post?.author._id
+                      : "/user/" + post?.author._id
                   }`}
                 >
                   <div className="text-gray-600 text-sm font-semibold">
@@ -117,10 +133,10 @@ const PostDetail: React.FC<Props> = ({ id }) => {
                 </Link>
                 <div className="flex w-full mt-1">
                   <Link
-                    href={`/user/${
+                    href={`${
                       post?.author._id === sessionUserId
                         ? "profile"
-                        : post?.author._id
+                        : "/user/" + post?.author._id
                     }`}
                   >
                     <div className="text-blue-700 font-base text-xs mr-1 cursor-pointer">
@@ -132,19 +148,28 @@ const PostDetail: React.FC<Props> = ({ id }) => {
               </div>
             </div>
             {sessionUserId === post.author._id && (
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <div className="h-auto w-[20px] ">
-                    <FontAwesomeIcon icon={faEllipsisVertical} />
-                  </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>Edit Caption</DropdownMenuItem>
-                  <DropdownMenuItem onClick={handleDeletePost}>
-                    Delete Post
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Dialog>
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <div className="h-auto w-[20px] ">
+                      <FontAwesomeIcon icon={faEllipsisVertical} />
+                    </div>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DialogTrigger asChild>
+                      <DropdownMenuItem>Edit Post</DropdownMenuItem>
+                    </DialogTrigger>
+                    <DropdownMenuItem onClick={handleDeletePost}>
+                      Delete Post
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <EditPost
+                  handleEditPost={handleEditPost}
+                  message={message}
+                  setMessage={setMessage}
+                />
+              </Dialog>
             )}
           </div>
           <div className="border-b border-gray-100"></div>

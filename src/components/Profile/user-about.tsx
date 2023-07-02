@@ -1,12 +1,36 @@
 import { Loader } from "../UI/loader";
 import { useGetUserQuery } from "@/queries/userQueries";
 import { Avatar, AvatarImage, AvatarFallback } from "../UI/avatar";
+import { useGetAllPostsQuery } from "@/queries/postQueries";
+import {
+  useFollowUserMutation,
+  useGetProfileQuery,
+  useUnfollowUserMutation,
+} from "@/queries/profileQueries";
 
 interface Props {
   id: string;
 }
 const UserAbout: React.FC<Props> = ({ id }) => {
   const { isLoading, data } = useGetUserQuery(id);
+  const { data: loggedInUser } = useGetProfileQuery();
+  const { isLoading: isPostsLoading, data: posts } = useGetAllPostsQuery();
+  const { mutate: followUser, isLoading: isMutating } = useFollowUserMutation();
+  const { mutate: unfollowUser, isLoading: isUnfollowing } =
+    useUnfollowUserMutation();
+  const userPosts = posts?.filter((post) => post.author._id === id);
+
+  const isFollowing =
+    loggedInUser?.following.length !== 0
+      ? loggedInUser?.following.find((user) => user._id === id)
+      : false;
+
+  const handleFollow = () => {
+    followUser(id);
+  };
+  const handleUnfollow = () => {
+    unfollowUser(id);
+  };
 
   if (isLoading && !data) {
     return (
@@ -16,7 +40,9 @@ const UserAbout: React.FC<Props> = ({ id }) => {
     );
   } else if (data)
     return (
-      <header className="flex flex-wrap items-center p-4 md:py-8 bg-white rounded-lg">
+      <header className="flex flex-wrap items-center p-4 md:py-8 bg-white rounded-lg relative">
+        {isMutating && <Loader />}
+        {isUnfollowing && <Loader />}
         <div className="md:w-3/12 flex  justify-center">
           <Avatar
             className="h-20 w-20 flex justify-center items-center  bg-white object-cover rounded-full
@@ -49,19 +75,32 @@ const UserAbout: React.FC<Props> = ({ id }) => {
             </span>
 
             {/* <!-- follow button --> */}
-            <button
-              className="bg-blue-500 px-2 py-1 
-                      text-white font-semibold text-sm rounded block text-center 
+
+            {isFollowing ? (
+              <button
+                className="text-blue-500 border-blue-500 border px-2 py-1 
+        bg-white font-semibold text-sm rounded block text-center 
                       sm:inline-block "
-            >
-              Follow
-            </button>
+                onClick={handleUnfollow}
+              >
+                Unfollow
+              </button>
+            ) : (
+              <button
+                className="bg-blue-500 px-2 py-1 
+      text-white font-semibold text-sm rounded block text-center 
+                    sm:inline-block "
+                onClick={handleFollow}
+              >
+                Follow
+              </button>
+            )}
           </div>
 
           {/* <!-- post, following, followers list for medium screens --> */}
           <ul className="hidden md:flex space-x-4 mb-4">
             <li>
-              <span className="font-semibold">0 </span>
+              <span className="font-semibold">{userPosts?.length} </span>
               posts
             </li>
 

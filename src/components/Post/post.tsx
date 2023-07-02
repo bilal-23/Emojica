@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar } from "../UI/avatar";
 import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import Link from "next/link";
@@ -15,6 +15,7 @@ import {
 import {
   useBookmarkPostMutation,
   useDeletePostMutation,
+  useEditPostMutation,
   useLikePostMutation,
   useUnbookmarkPostMutation,
   useUnlikePostMutation,
@@ -22,6 +23,9 @@ import {
 import { useGetBookmarksQuery } from "@/queries/profileQueries";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import { Dialog, DialogTrigger } from "../UI/dialog";
+import EditPost from "./edit-post";
+import { Loader } from "../UI/loader";
 
 interface Props {
   authorName: string;
@@ -59,9 +63,12 @@ const Post: React.FC<Props> = ({
   const { mutate: bookmark } = useBookmarkPostMutation(postId);
   const { mutate: unbookmark } = useUnbookmarkPostMutation(postId);
   const { mutate: deletePost } = useDeletePostMutation(postId);
-
+  const { isLoading: isEditing, mutate: editPost } =
+    useEditPostMutation(postId);
+  const [message, setMessage] = useState(content);
   const isLiked = likedBy.includes(sessionUserId);
   const isBookmarked = bookmarkedPosts?.find((post) => post._id === postId);
+
   const handleLikeUnlike = () => {
     if (isLiked) {
       unlikePost();
@@ -83,12 +90,18 @@ const Post: React.FC<Props> = ({
     router.push(`/post/${postId}`);
   };
 
+  const handleEditPost = () => {
+    editPost({ content: message });
+  };
+
   return (
-    <div className="bg-white shadow rounded-lg mt-2 sm:mt-5">
+    <div className="bg-white shadow rounded-lg mt-2 sm:mt-5 relative">
       <div className="flex flex-row justify-between px-2 py-3 mx-3">
         <div className="flex flex-row">
           <Link
-            href={`/user/${authorId === sessionUserId ? "profile" : authorId}`}
+            href={`${
+              authorId === sessionUserId ? "profile" : "/user/" + authorId
+            }`}
           >
             <Avatar className=" border-2  w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center ">
               <AvatarImage src={authorAvatar} />
@@ -97,8 +110,8 @@ const Post: React.FC<Props> = ({
           </Link>
           <div className="flex flex-col mb-2 ml-4 mt-1">
             <Link
-              href={`/user/${
-                authorId === sessionUserId ? "profile" : authorId
+              href={`${
+                authorId === sessionUserId ? "profile" : "/user/" + authorId
               }`}
             >
               <div className="text-gray-600 text-sm font-semibold">
@@ -107,8 +120,8 @@ const Post: React.FC<Props> = ({
             </Link>
             <div className="flex w-full mt-1">
               <Link
-                href={`/user/${
-                  authorId === sessionUserId ? "profile" : authorId
+                href={`${
+                  authorId === sessionUserId ? "profile" : "/user/" + authorId
                 }`}
               >
                 <div className="text-blue-700 font-base text-xs mr-1 cursor-pointer">
@@ -120,19 +133,28 @@ const Post: React.FC<Props> = ({
           </div>
         </div>
         {sessionUserId === authorId && (
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <div className="h-auto w-[20px] ">
-                <FontAwesomeIcon icon={faEllipsisVertical} />
-              </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>Edit Caption</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => deletePost()}>
-                Delete Post
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Dialog>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <div className="h-auto w-[20px] ">
+                  <FontAwesomeIcon icon={faEllipsisVertical} />
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DialogTrigger asChild>
+                  <DropdownMenuItem>Edit Post</DropdownMenuItem>
+                </DialogTrigger>
+                <DropdownMenuItem onClick={() => deletePost()}>
+                  Delete Post
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <EditPost
+              handleEditPost={handleEditPost}
+              message={message}
+              setMessage={setMessage}
+            />
+          </Dialog>
         )}
       </div>
       <div className="border-b border-gray-100"></div>

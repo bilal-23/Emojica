@@ -32,7 +32,7 @@ export default async function handler(
             [
                 { path: "author", select: "_id firstName lastName pic username" }
             ]
-        ).sort({ createdAt: -1 });
+        ).sort({ updatedAt: -1 });
 
         return res.status(200).json({ feedPosts });
 

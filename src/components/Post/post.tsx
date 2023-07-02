@@ -8,8 +8,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/UI/dropdown-menu";
 import {
@@ -25,7 +23,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { Dialog, DialogTrigger } from "../UI/dialog";
 import EditPost from "./edit-post";
-import { Loader } from "../UI/loader";
+import { formatDate } from "@/lib/formatDate";
 
 interface Props {
   authorName: string;
@@ -128,7 +126,9 @@ const Post: React.FC<Props> = ({
                   @{authorUsername}
                 </div>
               </Link>
-              {/* <div className="text-gray-400 font-thin text-xs">{1 day ago}</div> */}
+              <div className="text-gray-400 font-thin text-xs">
+                • {formatDate(updatedAt)}
+              </div>
             </div>
           </div>
         </div>

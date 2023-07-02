@@ -73,7 +73,7 @@ export interface PostDetail {
         createdAt: Date,
         updatedAt: Date
     }[]; // Assuming the comments structure is not defined
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    updatedAt: Date;
     __v: number;
 }

@@ -30,6 +30,7 @@ import {
 import { useGetBookmarksQuery } from "@/queries/profileQueries";
 import EditPost from "./edit-post";
 import { Dialog, DialogTrigger } from "@/components/UI/dialog";
+import { formatDate } from "@/lib/formatDate";
 
 interface Props {
   id: string;
@@ -46,7 +47,6 @@ const PostDetail: React.FC<Props> = ({ id }) => {
   const { isLoading: isDeleting, mutate: deletePost } =
     useDeletePostMutation(id);
   const [message, setMessage] = useState("");
-  const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -143,7 +143,11 @@ const PostDetail: React.FC<Props> = ({ id }) => {
                       @{post?.author.username}
                     </div>
                   </Link>
-                  {/* <div className="text-gray-400 font-thin text-xs">• 1 day ago</div> */}
+                  {post && (
+                    <div className="text-gray-400 font-thin text-xs">
+                      • {formatDate(post.updatedAt)}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

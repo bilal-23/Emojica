@@ -14,6 +14,7 @@ interface Props {
   firstName: string;
   lastName: string;
   username: string;
+  className?: string;
 }
 
 const UserSearchResult: React.FC<Props> = ({
@@ -22,6 +23,7 @@ const UserSearchResult: React.FC<Props> = ({
   lastName,
   pic,
   username,
+  className,
 }) => {
   const { isLoading, data } = useGetProfileQuery();
   const { mutate: followUser, isLoading: isMutating } = useFollowUserMutation();
@@ -47,7 +49,9 @@ const UserSearchResult: React.FC<Props> = ({
       : false;
 
   return (
-    <div className="relative px-2 lg:px-5 flex items-center gap-2 justify-between py-2 border-b">
+    <div
+      className={`${className} relative px-2 lg:px-5 flex items-center gap-2 justify-between py-2 border-b`}
+    >
       {isLoading || isMutating || isUnfollowing ? <Loader /> : null}
       <Link href={`/user/${id}`}>
         <div className="flex gap-2 xs:gap-5 items-center">

@@ -15,7 +15,6 @@ import {
   faEllipsisVertical,
   faSliders,
 } from "@fortawesome/free-solid-svg-icons";
-import { set } from "mongoose";
 
 const Feed = () => {
   const { isLoading, data: posts } = useGetFeedPostsQuery();

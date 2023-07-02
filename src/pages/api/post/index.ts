@@ -48,6 +48,8 @@ export default async function handler(
         content,
         imageUrl,
         author: userId,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
       });
 
       await newPost.save();
@@ -64,6 +66,6 @@ async function getPosts() {
       { path: "author", select: "_id firstName lastName pic username" },
       { path: "comments.user", select: "_id firstName lastName pic username" },
     ])
-    .sort({ createdAt: -1 }); // -1: DESC, 1: ASC
+    .sort({ updatedAt: -1 }); // -1: DESC, 1: ASC
   return posts;
 }

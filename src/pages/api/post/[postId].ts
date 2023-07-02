@@ -47,6 +47,7 @@ export default async function handler(
             if (post.author.toString() !== userId) return res.status(401).json({ message: "You are not allowed to edit this post" });
             post.content = content;
             post.imageUrl = imageUrl;
+            post.updatedAt = Date.now();
             await post.save();
 
             return res.status(200).json({ message: "Post updated successfully" });

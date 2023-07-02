@@ -12,7 +12,7 @@ const SearchResult = () => {
   const [searchResut, setSearchResult] = useState<[] | allUsers[]>([]);
   const router = useRouter();
   // /search?q=hey
-  const searchQuery = window.location.search.split("=")[1];
+  const searchQuery = router.query.q as string;
 
   useEffect(() => {
     if (allUsers) {

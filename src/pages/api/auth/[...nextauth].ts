@@ -1,4 +1,4 @@
-import { verifyPassword } from "@/lib/hashPassword";
+import { hashPassword, verifyPassword } from "@/lib/hashPassword";
 import { connectMongoDB } from "@/lib/mongoConnect";
 import { User } from "@/models/user";
 import NextAuth, { NextAuthOptions, } from "next-auth";
@@ -27,7 +27,7 @@ export const authOptions: NextAuthOptions = {
                 const isValid = await verifyPassword(password, user.password);
 
                 if (!isValid) {
-                    throw new Error("Incorrecct password")
+                    throw new Error("Incorrect password")
                 }
                 else {
                     return Promise.resolve(user);

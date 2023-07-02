@@ -44,7 +44,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (userUsername) {
             return res.status(400).json({ message: 'Username not available', id: "username" });
         }
-        const hashedPassword = await hashPassword(password);
         // Create a new user object
         const newUser = new User({
             firstName,
@@ -52,7 +51,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             username,
             email,
             pic: avatars[Math.floor(Math.random() * avatars.length)],
-            password: hashedPassword
+            password
         });
 
         // Save the user to the database

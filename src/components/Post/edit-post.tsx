@@ -9,6 +9,7 @@ import {
   DialogTrigger,
 } from "@/components/UI/dialog";
 import { Button } from "../UI/Button";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 interface Props {
   message: string;
@@ -32,9 +33,11 @@ const EditPost: React.FC<Props> = ({ message, setMessage, handleEditPost }) => {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button type="submit" onClick={handleEditPost}>
-            Save
-          </Button>
+          <DialogClose asChild>
+            <Button type="submit" onClick={handleEditPost}>
+              Save
+            </Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </>

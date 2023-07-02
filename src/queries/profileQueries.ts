@@ -86,3 +86,29 @@ export const useUnfollowUserMutation = () => {
         }
     })
 }
+
+
+
+// Edit Profile
+export const useEditProfileMutation = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationKey: ["edit-profile"],
+        mutationFn: async (formData: {
+            firstName: string,
+            lastName: string,
+            username: string,
+            email: string,
+            link: string,
+            bio: string,
+        }) => {
+            const response = await axios.patch<{ message: string }>(`/api/user/update`, formData);
+            return response.data;
+        },
+        onSuccess: (data) => {
+            queryClient.refetchQueries(["profile"]);
+            toast.success("Profile Updated");
+        }
+    });
+}

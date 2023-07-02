@@ -7,7 +7,7 @@ import { authOptions } from "../auth/[...nextauth]";
 import { NextAuthSession } from "@/types/user";
 
 // PATCH - UPDATE USER BY ID
-async function handler(
+export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
@@ -29,7 +29,7 @@ async function handler(
         // UPDATE USER BY ID
         const user = await getUserById(userId);
         if (!user) return res.status(404).json({ message: "User not found" });
-
+        console.log({ user });
         await User.findOneAndUpdate({ _id: new ObjectId(userId) }, {
             firstName,
             lastName,
@@ -37,7 +37,6 @@ async function handler(
             email,
             link,
             bio,
-            pic,
             updatedAt: new Date()
         });
 

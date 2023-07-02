@@ -24,6 +24,7 @@ import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { Dialog, DialogTrigger } from "../UI/dialog";
 import EditPost from "./edit-post";
 import { formatDate } from "@/lib/formatDate";
+import { Loader } from "../UI/loader";
 
 interface Props {
   authorName: string;
@@ -56,10 +57,14 @@ const Post: React.FC<Props> = ({
   const router = useRouter();
   const sessionUserId = useGetSession();
   const { data: bookmarkedPosts } = useGetBookmarksQuery();
-  const { mutate: likePost } = useLikePostMutation(postId);
-  const { mutate: unlikePost } = useUnlikePostMutation(postId);
-  const { mutate: bookmark } = useBookmarkPostMutation(postId);
-  const { mutate: unbookmark } = useUnbookmarkPostMutation(postId);
+  const { isLoading: isLikeLoading, mutate: likePost } =
+    useLikePostMutation(postId);
+  const { isLoading: isUnlikeLoading, mutate: unlikePost } =
+    useUnlikePostMutation(postId);
+  const { isLoading: isBookarkLoading, mutate: bookmark } =
+    useBookmarkPostMutation(postId);
+  const { isLoading: isUnbookmarkLoading, mutate: unbookmark } =
+    useUnbookmarkPostMutation(postId);
   const { mutate: deletePost } = useDeletePostMutation(postId);
   const { isLoading: isEditing, mutate: editPost } =
     useEditPostMutation(postId);
@@ -94,6 +99,11 @@ const Post: React.FC<Props> = ({
 
   return (
     <div className="bg-white shadow rounded-lg mt-2 sm:mt-5 relative">
+      {isLikeLoading && <Loader />}
+      {isUnlikeLoading && <Loader />}
+      {isBookarkLoading && <Loader />}
+      {isUnbookmarkLoading && <Loader />}
+      {isEditing && <Loader />}
       <div className="flex flex-row justify-between px-2 py-3 mx-3">
         <div className="flex flex-row">
           <Link

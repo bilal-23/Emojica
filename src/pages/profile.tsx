@@ -4,16 +4,22 @@ import { getServerSession } from "next-auth";
 import React from "react";
 import { authOptions } from "./api/auth/[...nextauth]";
 import ProfileAbout from "@/components/Profile/profile-about";
+import Head from "next/head";
 
 interface Props {
   bookmarks: boolean;
 }
 const Profile: NextPage<Props> = ({ bookmarks }) => {
   return (
-    <div className="w-full pb-10 pt-5 px-2">
-      <ProfileAbout isProfile={true} />
-      <ProfilePosts showBookmarks={bookmarks} />
-    </div>
+    <>
+      <Head>
+        <title>Emojica | Profile</title>
+      </Head>
+      <div className="w-full pb-10 pt-5 px-2">
+        <ProfileAbout isProfile={true} />
+        <ProfilePosts showBookmarks={bookmarks} />
+      </div>
+    </>
   );
 };
 

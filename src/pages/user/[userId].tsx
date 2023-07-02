@@ -4,16 +4,22 @@ import React from "react";
 import { authOptions } from "../api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 import UserAbout from "@/components/Profile/user-about";
+import Head from "next/head";
 
 interface Props {
   id: string;
 }
 const User: NextPage<Props> = ({ id }) => {
   return (
-    <div className="w-full py-10 px-2">
-      <UserAbout id={id} />
-      <UserPosts id={id} />
-    </div>
+    <>
+      <Head>
+        <title>Emojica | User</title>
+      </Head>
+      <div className="w-full py-10 px-2">
+        <UserAbout id={id} />
+        <UserPosts id={id} />
+      </div>
+    </>
   );
 };
 

@@ -39,10 +39,14 @@ const PostDetail: React.FC<Props> = ({ id }) => {
   const sessionUserId = useGetSession();
   const { data: bookmarkedPosts } = useGetBookmarksQuery();
   const { isLoading, data: post } = useGetPostQuery(id);
-  const { mutate: likePost } = useLikePostMutation(id);
-  const { mutate: unlikePost } = useUnlikePostMutation(id);
-  const { mutate: bookmark } = useBookmarkPostMutation(id);
-  const { mutate: unbookmark } = useUnbookmarkPostMutation(id);
+  const { isLoading: isLikeLoading, mutate: likePost } =
+    useLikePostMutation(id);
+  const { isLoading: isUnlikeLoading, mutate: unlikePost } =
+    useUnlikePostMutation(id);
+  const { isLoading: isBookmarkLoading, mutate: bookmark } =
+    useBookmarkPostMutation(id);
+  const { isLoading: isUnbookmarkLoading, mutate: unbookmark } =
+    useUnbookmarkPostMutation(id);
   const { isLoading: isEditing, mutate: editPost } = useEditPostMutation(id);
   const { isLoading: isDeleting, mutate: deletePost } =
     useDeletePostMutation(id);
@@ -89,11 +93,17 @@ const PostDetail: React.FC<Props> = ({ id }) => {
 
   return (
     <>
-      {isLoading && <Loader />}
-      {isDeleting && <Loader />}
-      {isEditing && <Loader />}
       {post && (
-        <div className="bg-white shadow rounded-lg mt-2 sm:mt-5 mb-5">
+        <div className="bg-white shadow rounded-lg mt-2 sm:mt-5 mb-5 relative">
+          {isLoading ||
+          isDeleting ||
+          isEditing ||
+          isLikeLoading ||
+          isUnlikeLoading ||
+          isUnbookmarkLoading ||
+          isBookmarkLoading ? (
+            <Loader />
+          ) : null}
           <div className="bg-white py-2 px-2 mx-2 flex items-center">
             <FontAwesomeIcon
               icon={faChevronLeft}

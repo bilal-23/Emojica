@@ -17,6 +17,9 @@ export const useLikePostMutation = (postId: string) => {
             queryClient.refetchQueries(["post", postId]); // Invalidate that individual post query
             queryClient.refetchQueries(["feed-posts"]); // Invalidate the feed posts query
             queryClient.refetchQueries(["all-posts"]); // Invalidate the user query
+        },
+        onError: () => {
+            toast.error("Something went wrong while liking the post, please try again later");
         }
     });
 }
@@ -35,6 +38,9 @@ export const useUnlikePostMutation = (postId: string) => {
             queryClient.refetchQueries(["post", postId]); // Invalidate that individual post query
             queryClient.refetchQueries(["feed-posts"]); // Invalidate the feed posts query
             queryClient.refetchQueries(["all-posts"]); // Invalidate the user query
+        },
+        onError: () => {
+            toast.error("Something went wrong while unliking the post, please try again later");
         }
     });
 }
@@ -52,7 +58,10 @@ export const useBookmarkPostMutation = (postId: string) => {
         },
         onSuccess: () => {
             queryClient.refetchQueries(["bookmarks"]);
-            toast.success("Post bookmarked");
+            // toast.success("Post bookmarked");
+        },
+        onError: () => {
+            toast.error("Something went wrong while bookmarking the post, please try again later");
         }
     });
 }
@@ -69,8 +78,11 @@ export const useUnbookmarkPostMutation = (postId: string) => {
         },
         onSuccess: () => {
             queryClient.refetchQueries(["bookmarks"]);
-            toast.success("Post unbookmarked");
+            // toast.success("Post unbookmarked");
         },
+        onError: () => {
+            toast.error("Something went wrong while unbookmarking the post, please try again later");
+        }
     });
 }
 
@@ -89,11 +101,14 @@ export const useDeletePostMutation = (postId: string) => {
             queryClient.invalidateQueries(["feed-posts"]); // Invalidate the feed posts query
             queryClient.invalidateQueries(["bookmarks"])
             queryClient.invalidateQueries(["all-posts"]); // Invalidate the user query
-            toast.success("Post deleted successfully");
+            // toast.success("Post deleted successfully");
             console.log(router);
             if (router.pathname === `/post/[postId]`) {
                 router.push("/");
             }
+        },
+        onError: () => {
+            toast.error("Something went wrong while deleting the post, please try again later");
         }
     });
 }
@@ -110,7 +125,7 @@ export const useEditPostMutation = (postId: string) => {
             return true;
         },
         onError: () => {
-            toast.error("Something went wrong");
+            toast.error("Something went wrong while editing the post, please try again later");
         },
         onSuccess: () => {
             queryClient.invalidateQueries(["feed-posts"]); // Invalidate the feed posts query
@@ -118,6 +133,6 @@ export const useEditPostMutation = (postId: string) => {
             queryClient.invalidateQueries(["all-posts"]); // Invalidate the user query
             queryClient.invalidateQueries(["post", postId]); // Invalidate that individual post query
             toast.success("Post edited successfully");
-        }
+        },
     });
 }

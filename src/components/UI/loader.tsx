@@ -3,7 +3,10 @@ import React from "react";
 export const Loader = () => {
   return (
     <>
-      <div className="absolute top-0 left-0 w-full h-full bg-black backdrop-blur-[8px] opacity-[0.35] z-[99]"></div>
+      <div
+        className="absolute top-0 left-0 w-full h-full bg-gray-200 backdrop-blur-[8px] 
+      opacity-[0.35] z-[99]"
+      ></div>
       <div
         role="status"
         style={{

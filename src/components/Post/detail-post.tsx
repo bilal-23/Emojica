@@ -19,6 +19,10 @@ import { useRouter } from "next/router";
 import { useGetPostQuery } from "@/queries/postQueries";
 import { Loader } from "../UI/loader";
 import { useGetSession } from "@/hooks/use-session";
+import {
+  useLikePostMutation,
+  useUnlikePostMutation,
+} from "@/queries/post-action-queries";
 
 interface Props {
   id: string;
@@ -26,7 +30,23 @@ interface Props {
 const PostDetail: React.FC<Props> = ({ id }) => {
   const sessionUserId = useGetSession();
   const { isLoading, data: post } = useGetPostQuery(id);
+  const { mutate: likePost } = useLikePostMutation(id);
+  const { mutate: unlikePost } = useUnlikePostMutation(id);
   const router = useRouter();
+
+  const isLiked = post?.likes.likedBy.find(
+    (item) => item._id === sessionUserId
+  );
+
+  const handleLikeUnlike = () => {
+    if (isLiked) {
+      // User already liked the post
+      unlikePost();
+    } else {
+      // User has not liked the post
+      likePost();
+    }
+  };
 
   return (
     <>
@@ -133,9 +153,14 @@ const PostDetail: React.FC<Props> = ({ id }) => {
                 </svg>
               </span>
               {/* HEART ICON */}
-              <span className="transition ease-out duration-300 hover:bg-gray-50 bg-gray-100 h-8 px-2 py-2 text-center rounded-full text-gray-100 cursor-pointer">
+              <span
+                className="transition ease-out duration-300 hover:bg-gray-50 bg-gray-100 h-8 px-2 py-2 text-center rounded-full text-red-500 cursor-pointer"
+                onClick={handleLikeUnlike}
+              >
                 <svg
-                  className="h-4 w-4 text-red-500"
+                  className={`h-4 w-4 text-red-500 ${
+                    isLiked ? "fill-red-500" : ""
+                  }`}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -172,7 +197,7 @@ const PostDetail: React.FC<Props> = ({ id }) => {
             </div>
           </div>
           {/* COmmetns */}
-          <div className="w-full relative flex items-center self-center  p-4 overflow-hidden text-gray-600 focus-within:text-gray-400">
+          <form className="w-full relative flex items-center self-center  p-4 overflow-hidden text-gray-600 focus-within:text-gray-400">
             <Link href={"/profile"}>
               <Avatar className="w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center shadow-inner border">
                 <AvatarImage src="/" />
@@ -185,7 +210,7 @@ const PostDetail: React.FC<Props> = ({ id }) => {
               placeholder="Post a comment..."
               autoComplete="off"
             />
-          </div>
+          </form>
           <div className="flex w-full flex-col border-t border-gray-100">
             {post?.comments.map((comment) => {
               return (

@@ -30,10 +30,7 @@ export default async function handler(
 
         const feedPosts = await Post.find({ author: { $in: authorIds } }).populate(
             [
-                { path: "author", select: "_id firstName lastName pic username" },
-                { path: "comments.user", select: "_id firstName lastName pic username" },
-                { path: "likes.likedBy", select: "_id firstName lastName pic username" },
-                { path: "likes.dislikedBy", select: "_id firstName lastName pic username" }
+                { path: "author", select: "_id firstName lastName pic username" }
             ]
         ).sort({ createdAt: -1 });
 

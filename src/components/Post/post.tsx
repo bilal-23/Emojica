@@ -4,6 +4,10 @@ import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useGetSession } from "@/hooks/use-session";
+import {
+  useLikePostMutation,
+  useUnlikePostMutation,
+} from "@/queries/post-action-queries";
 
 interface Props {
   authorName: string;
@@ -15,6 +19,7 @@ interface Props {
   image?: string;
   commentsCount: number;
   likesCount: number;
+  likedBy: string[];
   postId: string;
   updatedAt: string;
 }
@@ -28,11 +33,25 @@ const Post: React.FC<Props> = ({
   content,
   image,
   likesCount,
+  likedBy,
   postId,
   updatedAt,
 }) => {
   const router = useRouter();
   const sessionUserId = useGetSession();
+  const { mutate: likePost } = useLikePostMutation(postId);
+  const { mutate: unlikePost } = useUnlikePostMutation(postId);
+
+  const isLiked = likedBy.includes(sessionUserId);
+
+  const handleLikeUnlike = () => {
+    if (isLiked) {
+      unlikePost();
+    } else {
+      likePost();
+    }
+  };
+
   const handleCommentSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     router.push(`/post/${postId}`);
@@ -120,9 +139,14 @@ const Post: React.FC<Props> = ({
             </svg>
           </span>
           {/* HEART ICON */}
-          <span className="transition ease-out duration-300 hover:bg-gray-50 bg-gray-100 h-8 px-2 py-2 text-center rounded-full text-gray-100 cursor-pointer">
+          <span
+            className="transition ease-out duration-300 hover:bg-gray-50 bg-gray-100 h-8 px-2 py-2 text-center rounded-full text-gray-100 cursor-pointer"
+            onClick={handleLikeUnlike}
+          >
             <svg
-              className="h-4 w-4 text-red-500"
+              className={`h-4 w-4 text-red-500 ${
+                isLiked ? "fill-red-500" : ""
+              }`}
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"

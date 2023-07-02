@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { Post, PostDetail } from "@/types/post";
 
 // Create a new post
 export const useCreatePostMutation = () => {
@@ -37,7 +38,7 @@ export const useGetAllPostsQuery = () => useQuery({
 export const useGetPostQuery = (postId: string) => useQuery({
     queryKey: ["post", postId],
     queryFn: async () => {
-        const response = await axios.get<{ post: Post }>(`/api/post/${postId}`);
+        const response = await axios.get<{ post: PostDetail }>(`/api/post/${postId}`);
         return response.data.post;
     }
 });

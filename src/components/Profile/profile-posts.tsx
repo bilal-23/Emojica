@@ -51,6 +51,7 @@ const ProfilePosts: React.FC<Props> = ({ showBookmarks }) => {
                 commentsCount={post.comments.length}
                 content={post.content}
                 likesCount={post.likes.likeCount}
+                likedBy={post.likes.likedBy}
                 postId={post._id}
                 updatedAt={post.updatedAt}
               />

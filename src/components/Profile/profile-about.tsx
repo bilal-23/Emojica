@@ -12,8 +12,6 @@ const ProfileAbout: React.FC<Props> = ({ isProfile }) => {
   const { isLoading: isPostsLoading, data: posts } = useGetMyPostsQuery();
   const { isLoading, data } = useGetProfileQuery();
 
-  console.log(posts);
-
   if ((isLoading && !data) || isPostsLoading) {
     return (
       <header className="flex flex-wrap items-center p-4 md:py-8 bg-white rounded-lg">

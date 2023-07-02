@@ -63,8 +63,26 @@ const ProfilePosts: React.FC<Props> = ({ showBookmarks }) => {
         {bookmarks?.length === 0 ? (
           <p className="text-center mt-5">No Post Bookmarked Yet</p>
         ) : (
-          // <Post />
-          ""
+          bookmarks?.map((post) => {
+            return (
+              <Post
+                key={post._id}
+                authorAvatar={post.author.pic}
+                authorId={post.author._id}
+                authorName={post.author.firstName + " " + post.author.lastName}
+                authorAvatarFallback={
+                  post.author.firstName[0] + post.author.lastName[0]
+                }
+                authorUsername={post.author.username}
+                commentsCount={post.comments.length}
+                content={post.content}
+                likesCount={post.likes.likeCount}
+                likedBy={post.likes.likedBy}
+                postId={post._id}
+                updatedAt={post.updatedAt}
+              />
+            );
+          })
         )}
       </TabsContent>
     </Tabs>

@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import axios, { AxiosError } from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { profile } from "@/types/user";
+import { Post } from "@/types/post";
 
 // get profile of current logged in user
 export const useGetProfileQuery = () => useQuery({
@@ -32,7 +33,7 @@ export const useGetMyPostsQuery = () => useQuery({
 export const useGetBookmarksQuery = () => useQuery({
     queryKey: ["bookmarks"],
     queryFn: async () => {
-        const response = await axios.get<{ bookmarks: any[] }>("/api/post/bookmark");
+        const response = await axios.get<{ bookmarks: Post[] }>("/api/post/bookmark");
         return response.data.bookmarks;
     },
     onError: (error: AxiosError<{ message: string }>) => {
@@ -50,7 +51,6 @@ export const useFollowUserMutation = () => {
             return response.data;
         },
         onSuccess: (data, userId) => {
-            console.log(userId);
             queryClient.refetchQueries(["profile"]);
             queryClient.refetchQueries(["user", userId]);
             queryClient.refetchQueries(["feed-posts"]);
@@ -72,7 +72,6 @@ export const useUnfollowUserMutation = () => {
             return response.data;
         },
         onSuccess: (data, userId) => {
-            console.log(userId);
             queryClient.refetchQueries(["profile"]);
             queryClient.refetchQueries(["user", userId]);
             queryClient.refetchQueries(["feed-posts"]);

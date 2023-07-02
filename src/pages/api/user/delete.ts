@@ -29,7 +29,6 @@ export default async function handler(
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
-            console.log(user);
             const users = await User.find({})
             return res.status(200).json({ message: "User deleted successfully", users });
         }

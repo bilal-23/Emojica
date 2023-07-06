@@ -18,7 +18,10 @@ const ProfilePosts: React.FC<Props> = ({ showBookmarks }) => {
   const [tabSelected, setTabSelected] = useState<"posts" | "bookmarks">(
     showBookmarks ? "bookmarks" : "posts"
   );
+  const postTabRef = React.useRef<HTMLButtonElement>(null);
+  const bookmarkTabRef = React.useRef<HTMLButtonElement>(null);
   const router = useRouter();
+
   const myPosts = posts?.filter((post) => post.author._id === sessionUserId);
 
   useEffect(() => {
@@ -26,6 +29,7 @@ const ProfilePosts: React.FC<Props> = ({ showBookmarks }) => {
       if (router.query.bookmarks === "true") {
         setTabSelected("bookmarks");
       } else {
+        console.log("POSTS");
         setTabSelected("posts");
       }
     }
@@ -37,9 +41,10 @@ const ProfilePosts: React.FC<Props> = ({ showBookmarks }) => {
   }
 
   return (
-    <Tabs defaultValue={tabSelected} className="w-full">
+    <Tabs defaultValue={tabSelected} className="w-full" value={tabSelected}>
       <TabsList className="w-full flex">
         <TabsTrigger
+          ref={postTabRef}
           value="posts"
           className="flex-1"
           onClick={() => {
@@ -52,6 +57,7 @@ const ProfilePosts: React.FC<Props> = ({ showBookmarks }) => {
           Posts
         </TabsTrigger>
         <TabsTrigger
+          ref={bookmarkTabRef}
           value="bookmarks"
           className="flex-1"
           onClick={() => {

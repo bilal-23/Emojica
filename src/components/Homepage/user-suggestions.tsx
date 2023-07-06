@@ -3,8 +3,11 @@ import { useGetAllUserQuery } from "@/queries/userQueries";
 import UserSearchResult from "../SearchResult/user";
 import { Loader } from "../UI/loader";
 import { useGetSession } from "@/hooks/use-session";
+import { useGetProfileQuery } from "@/queries/profileQueries";
 
 const UserSuggestions = () => {
+  const { isLoading: isProfileLoading, data: profileData } =
+    useGetProfileQuery();
   const { isLoading, data } = useGetAllUserQuery();
   const sessionUserId = useGetSession();
   return (
@@ -14,13 +17,15 @@ const UserSuggestions = () => {
           Who to follow
         </header>
 
-        <main className="pt-2  h-full overflow-y-scroll">
+        <main className="pt-2   max-h-[400px] border overflow-y-scroll">
           {isLoading && <Loader />}
           {data &&
             data.users.map(({ _id, firstName, lastName, username, pic }) => {
               return (
-                _id !== sessionUserId && (
+                _id !== sessionUserId &&
+                !profileData?.following.find((item) => item._id === _id) && (
                   <UserSearchResult
+                    key={_id}
                     id={_id}
                     firstName={firstName}
                     lastName={lastName}

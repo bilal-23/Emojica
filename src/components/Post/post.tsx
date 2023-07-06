@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Avatar } from "../UI/avatar";
 import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import Link from "next/link";
@@ -12,9 +12,11 @@ import {
 } from "@/components/UI/dropdown-menu";
 import {
   useBookmarkPostMutation,
+  useDeleteCommentMutation,
   useDeletePostMutation,
   useEditPostMutation,
   useLikePostMutation,
+  usePostCommentMutation,
   useUnbookmarkPostMutation,
   useUnlikePostMutation,
 } from "@/queries/post-action-queries";
@@ -71,6 +73,11 @@ const Post: React.FC<Props> = ({
   const [message, setMessage] = useState(content);
   const isLiked = likedBy.includes(sessionUserId);
   const isBookmarked = bookmarkedPosts?.find((post) => post._id === postId);
+  const { isLoading: isPostingComment, mutate: postComment } =
+    usePostCommentMutation(postId);
+  const { isLoading: isDeletingComment, mutate: deleteComment } =
+    useDeleteCommentMutation(postId);
+  const commentRef = useRef<HTMLInputElement>(null);
 
   const handleLikeUnlike = () => {
     if (isLiked) {
@@ -90,6 +97,12 @@ const Post: React.FC<Props> = ({
 
   const handleCommentSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    e.preventDefault();
+    const comment = commentRef.current?.value as string;
+    if (comment) {
+      postComment({ comment: comment });
+      commentRef.current!.value = "";
+    }
     router.push(`/post/${postId}`);
   };
 
@@ -104,6 +117,8 @@ const Post: React.FC<Props> = ({
       {isBookarkLoading && <Loader />}
       {isUnbookmarkLoading && <Loader />}
       {isEditing && <Loader />}
+      {isPostingComment && <Loader />}
+      {isDeletingComment && <Loader />}
       <div className="flex flex-row justify-between px-2 py-3 mx-3">
         <div className="flex flex-row">
           <Link
@@ -261,7 +276,7 @@ const Post: React.FC<Props> = ({
           </div>
         </div>
       </div>
-      {/* <form
+      <form
         className="w-full relative flex items-center self-center  p-4 overflow-hidden text-gray-600 focus-within:text-gray-400"
         onSubmit={handleCommentSubmit}
       >
@@ -276,8 +291,9 @@ const Post: React.FC<Props> = ({
           className="w-full py-2 pl-4 pr-10 text-sm bg-gray-100 border border-transparent appearance-none rounded-tg placeholder-gray-400 focus:bg-white focus:outline-none focus:border-blue-500 focus:text-gray-900 focus:shadow-outline-blue rounded-[25px]"
           placeholder="Post a comment..."
           autoComplete="off"
+          ref={commentRef}
         />
-      </form> */}
+      </form>
     </div>
   );
 };

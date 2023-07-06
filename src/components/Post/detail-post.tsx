@@ -21,13 +21,18 @@ import { Loader } from "../UI/loader";
 import { useGetSession } from "@/hooks/use-session";
 import {
   useBookmarkPostMutation,
+  useDeleteCommentMutation,
   useDeletePostMutation,
   useEditPostMutation,
   useLikePostMutation,
+  usePostCommentMutation,
   useUnbookmarkPostMutation,
   useUnlikePostMutation,
 } from "@/queries/post-action-queries";
-import { useGetBookmarksQuery } from "@/queries/profileQueries";
+import {
+  useGetBookmarksQuery,
+  useGetProfileQuery,
+} from "@/queries/profileQueries";
 import EditPost from "./edit-post";
 import { Dialog, DialogTrigger } from "@/components/UI/dialog";
 import { formatDate } from "@/lib/formatDate";
@@ -37,6 +42,7 @@ interface Props {
 }
 const PostDetail: React.FC<Props> = ({ id }) => {
   const sessionUserId = useGetSession();
+  const { isLoading: profileLoading, data: profileData } = useGetProfileQuery();
   const { data: bookmarkedPosts } = useGetBookmarksQuery();
   const { isLoading, data: post } = useGetPostQuery(id);
   const { isLoading: isLikeLoading, mutate: likePost } =
@@ -50,8 +56,17 @@ const PostDetail: React.FC<Props> = ({ id }) => {
   const { isLoading: isEditing, mutate: editPost } = useEditPostMutation(id);
   const { isLoading: isDeleting, mutate: deletePost } =
     useDeletePostMutation(id);
+  const { isLoading: isPostingComment, mutate: postComment } =
+    usePostCommentMutation(id);
+  const { isLoading: isDeletingComment, mutate: deleteComment } =
+    useDeleteCommentMutation(id);
   const [message, setMessage] = useState("");
+  const commentRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+
+  const name =
+    profileData &&
+    profileData?.firstName.split("")[0] + profileData?.lastName.split("")[0];
 
   useEffect(() => {
     if (post) {
@@ -91,12 +106,24 @@ const PostDetail: React.FC<Props> = ({ id }) => {
     editPost({ content: message });
   };
 
+  const handleComment = (e: any) => {
+    e.preventDefault();
+    const comment = commentRef.current?.value as string;
+    if (comment) {
+      postComment({ comment: comment });
+      commentRef.current!.value = "";
+    }
+  };
+
   return (
     <>
       {post && (
         <div className="bg-white shadow rounded-lg mt-2 sm:mt-5 mb-5 relative">
           {isLoading ||
+          profileLoading ||
           isDeleting ||
+          isPostingComment ||
+          isDeletingComment ||
           isEditing ||
           isLikeLoading ||
           isUnlikeLoading ||
@@ -266,14 +293,12 @@ const PostDetail: React.FC<Props> = ({ id }) => {
           </div>
           <div className="flex w-full border-t border-gray-100 justify-between gap-2">
             <div className="mt-3 mx-2 xs:mx-5 flex flex-row text-xs">
-              <Link href="/post/1">
-                <div className="flex text-gray-700 font-normal rounded-md mb-2 xs:mr-4 items-center cursor-pointer hover:text-blue-500">
-                  Comments:
-                  <div className="ml-1 text-gray-400 text-ms font-semibold">
-                    {post?.comments.length}
-                  </div>
+              <div className="flex text-gray-700 font-normal rounded-md mb-2 xs:mr-4 items-center cursor-pointer hover:text-blue-500">
+                Comments:
+                <div className="ml-1 text-gray-400 text-ms font-semibold">
+                  {post?.comments.length}
                 </div>
-              </Link>
+              </div>
             </div>
             <div className="mt-3 xs:mx-5 w-full flex justify-end text-xs">
               <div className="flex text-gray-700  rounded-md mb-2 mr-4 items-center">
@@ -286,50 +311,64 @@ const PostDetail: React.FC<Props> = ({ id }) => {
             </div>
           </div>
           {/* COmmetns */}
-          {/* <form className="w-full relative flex items-center self-center  p-4 overflow-hidden text-gray-600 focus-within:text-gray-400">
+          <form
+            className="w-full relative flex items-center self-center  p-4 overflow-hidden text-gray-600 focus-within:text-gray-400"
+            onSubmit={handleComment}
+          >
             <Link href={"/profile"}>
               <Avatar className="w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center shadow-inner border">
-                <AvatarImage src="/" />
-                <AvatarFallback>BM</AvatarFallback>
+                <AvatarImage src={profileData?.pic} />
+                <AvatarFallback>{name}</AvatarFallback>
               </Avatar>
             </Link>
             <input
-              type="search"
+              type="text"
               className="w-full py-2 pl-4 pr-10 text-sm bg-gray-100 border border-transparent appearance-none rounded-tg placeholder-gray-400 focus:bg-white focus:outline-none focus:border-blue-500 focus:text-gray-900 focus:shadow-outline-blue rounded-[25px]"
               placeholder="Post a comment..."
               autoComplete="off"
+              ref={commentRef}
             />
-          </form> */}
-          {/* <div className="flex w-full flex-col border-t border-gray-100">
+          </form>
+          <div className="flex w-full flex-col border-t border-gray-100">
             {post?.comments.map((comment) => {
               return (
-                <div className="w-full relative flex gap-2 items-start self-center  p-4 overflow-hidden text-gray-600 ">
-                  <Link href={`/user/${comment.user._id}`}>
-                    <Avatar className="w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center shadow-inner border">
-                      <AvatarImage src={comment.user.pic} />
-                      <AvatarFallback>
-                        {comment.user.firstName[0] + comment.user.lastName[0]}
-                      </AvatarFallback>
-                    </Avatar>
-                  </Link>
-                  <p className="text-justify">{comment.comment}</p>
+                <div
+                  className="w-full justify-between relative flex gap-2 items-start self-center  p-4 overflow-hidden text-gray-600 "
+                  key={comment._id}
+                >
+                  <div className="flex items-start gap-2">
+                    <Link href={`/user/${comment.user._id}`}>
+                      <Avatar className="w-10 h-10 object-cover rounded-full  mr-2 cursor-pointer flex items-center justify-center shadow-inner border">
+                        <AvatarImage src={comment.user.pic} />
+                        <AvatarFallback>
+                          {comment.user.firstName[0] + comment.user.lastName[0]}
+                        </AvatarFallback>
+                      </Avatar>
+                    </Link>
+                    <p className="text-justify">{comment.comment}</p>
+                  </div>
                   {sessionUserId === comment.user._id && (
                     <DropdownMenu>
                       <DropdownMenuTrigger>
-                        <FontAwesomeIcon icon={faEllipsisVertical} />
+                        <div className="h-auto w-[20px] ">
+                          <FontAwesomeIcon icon={faEllipsisVertical} />
+                        </div>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>Edit Comment</DropdownMenuItem>
-                        <DropdownMenuItem>Delete Comment</DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            deleteComment({ commentId: comment._id })
+                          }
+                        >
+                          Delete Comment
+                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   )}
                 </div>
               );
             })}
-          </div> */}
+          </div>
         </div>
       )}
     </>

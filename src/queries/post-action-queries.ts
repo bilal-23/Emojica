@@ -17,6 +17,7 @@ export const useLikePostMutation = (postId: string) => {
             queryClient.refetchQueries(["post", postId]); // Invalidate that individual post query
             queryClient.refetchQueries(["feed-posts"]); // Invalidate the feed posts query
             queryClient.refetchQueries(["all-posts"]); // Invalidate the user query
+            queryClient.refetchQueries(["bookmarks"]);
         },
         onError: () => {
             toast.error("Something went wrong while liking the post, please try again later");
@@ -38,6 +39,7 @@ export const useUnlikePostMutation = (postId: string) => {
             queryClient.refetchQueries(["post", postId]); // Invalidate that individual post query
             queryClient.refetchQueries(["feed-posts"]); // Invalidate the feed posts query
             queryClient.refetchQueries(["all-posts"]); // Invalidate the user query
+            queryClient.refetchQueries(["bookmarks"]);
         },
         onError: () => {
             toast.error("Something went wrong while unliking the post, please try again later");
@@ -116,7 +118,6 @@ export const useDeletePostMutation = (postId: string) => {
 // Edit Post
 export const useEditPostMutation = (postId: string) => {
     const queryClient = useQueryClient();
-    const router = useRouter();
 
     return useMutation({
         mutationKey: ["editPost", postId],
@@ -134,5 +135,51 @@ export const useEditPostMutation = (postId: string) => {
             queryClient.invalidateQueries(["post", postId]); // Invalidate that individual post query
             toast.success("Post edited successfully");
         },
+    });
+}
+
+
+// POST A COMMENT
+export const usePostCommentMutation = (postId: string) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationKey: ["postComment", postId],
+        mutationFn: async ({ comment }: { comment: string }) => {
+            const res = await axios.post(`/api/post/comment/${postId}`, { comment: comment });
+            return res.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(["post", postId]); // Invalidate that individual post query
+            queryClient.invalidateQueries(["feed-posts"]); // Invalidate the feed posts query
+            queryClient.invalidateQueries(["bookmarks"])
+            queryClient.invalidateQueries(["all-posts"]); // Invalidate the user query
+        },
+        onError: () => {
+            toast.error("Something went wrong while posting the comment, please try again later");
+        }
+    });
+};
+
+// DELETE A COMMENT
+export const useDeleteCommentMutation = (postId: string) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationKey: ["deleteComment", postId],
+        mutationFn: async ({ commentId }: { commentId: string }) => {
+            const res = await axios.post(`/api/post/comment/delete-comment`, { postId, commentId });
+            return res.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(["post", postId]); // Invalidate that individual post query
+            queryClient.invalidateQueries(["feed-posts"]); // Invalidate the feed posts query
+            queryClient.invalidateQueries(["bookmarks"])
+            queryClient.invalidateQueries(["all-posts"]); // Invalidate the user query
+        },
+        onError: () => {
+            toast.error("Something went wrong while deleting the comment, please try again later");
+        }
+
     });
 }

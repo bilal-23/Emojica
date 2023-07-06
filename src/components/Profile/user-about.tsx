@@ -59,7 +59,7 @@ const UserAbout: React.FC<Props> = ({ id }) => {
         <div className="w-8/12 md:w-7/12 ml-2 xs:ml-4">
           <div className="md:flex md:flex-wrap md:items-center mb-4">
             <h2 className="text-3xl inline-block font-light md:mr-2 mb-2 sm:mb-0">
-              {data.username}
+              @{data.username}
             </h2>
 
             {/* <!-- badge --> */}

@@ -6,8 +6,10 @@ import { ScrollArea } from "@/components/UI/scroll";
 import { useGetAllUserQuery } from "@/queries/userQueries";
 import { allUsers } from "@/types/user";
 import { useRouter } from "next/router";
+import { useGetSession } from "@/hooks/use-session";
 
 const SearchResult = () => {
+  const sessionUserId = useGetSession();
   const { data: allUsers } = useGetAllUserQuery();
   const [searchResut, setSearchResult] = useState<[] | allUsers[]>([]);
   const router = useRouter();
@@ -42,17 +44,20 @@ const SearchResult = () => {
       {/* <div > */}
       {searchResut && searchResut.length > 0 && (
         <ScrollArea className="shadow bg-white rounded-lg  mx-2 mt-2 p-2 sm:mt-5 mb-5 flex flex-col gap-2  overflow-scroll   md:max-h-[500px]">
-          {searchResut.map((user, index, array) => (
-            <UserSearchResult
-              className={index === array.length - 1 ? "border-none" : ""}
-              key={user._id}
-              firstName={user.firstName}
-              id={user._id}
-              lastName={user.lastName}
-              pic={user.pic}
-              username={user.username}
-            />
-          ))}
+          {searchResut.map(
+            (user, index, array) =>
+              user._id !== sessionUserId && (
+                <UserSearchResult
+                  className={index === array.length - 1 ? "border-none" : ""}
+                  key={user._id}
+                  firstName={user.firstName}
+                  id={user._id}
+                  lastName={user.lastName}
+                  pic={user.pic}
+                  username={user.username}
+                />
+              )
+          )}
         </ScrollArea>
       )}
       {searchResut && searchResut.length === 0 && (

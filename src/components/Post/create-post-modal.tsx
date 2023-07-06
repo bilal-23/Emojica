@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -6,30 +6,27 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-} from "@/components/UI/dialog";
-import { Button } from "../UI/Button";
+} from "../UI/dialog";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { Button } from "../UI/Button";
 
 interface Props {
-  message: string;
-  setMessage: React.Dispatch<React.SetStateAction<string>>;
-  handleEditPost?: () => void;
-  handleCreatePost?: () => void;
+  createPost: ({ content }: { content: string }) => void;
 }
-const EditPost: React.FC<Props> = ({
-  message,
-  setMessage,
-  handleEditPost,
-  handleCreatePost,
-}) => {
+
+const CreatePostModal: React.FC<Props> = ({ createPost }) => {
+  const [message, setMessage] = useState("");
+  const handleEditPost = async (e: any) => {
+    e.preventDefault();
+    setMessage("");
+    createPost({ content: message });
+  };
+
   return (
     <>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>
-            {handleCreatePost ? "Create Post" : "Edit Post"}
-          </DialogTitle>
+          <DialogTitle>Edit Post</DialogTitle>
           <DialogDescription>
             <textarea
               value={message}
@@ -42,16 +39,7 @@ const EditPost: React.FC<Props> = ({
         </DialogHeader>
         <DialogFooter>
           <DialogClose asChild>
-            <Button
-              type="submit"
-              onClick={() => {
-                if (handleCreatePost) {
-                  handleCreatePost();
-                } else {
-                  if (handleEditPost) handleEditPost();
-                }
-              }}
-            >
+            <Button type="submit" onClick={handleEditPost}>
               Save
             </Button>
           </DialogClose>
@@ -61,4 +49,4 @@ const EditPost: React.FC<Props> = ({
   );
 };
 
-export default EditPost;
+export default CreatePostModal;

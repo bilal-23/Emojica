@@ -3,8 +3,19 @@ import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import { faSquarePlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Dialog, DialogTrigger } from "../UI/dialog";
+import EditPost from "../Post/edit-post";
+import { useCreatePostMutation } from "@/queries/postQueries";
 
-const Aside = () => {
+interface Props {}
+
+const Aside: React.FC<Props> = () => {
+  const { mutate: createPostQuery, isLoading: isCreatePostLoading } =
+    useCreatePostMutation();
+
+  const [message, setMessage] = React.useState("");
   const router = useRouter();
   const { asPath } = router;
 
@@ -12,6 +23,11 @@ const Aside = () => {
     await signOut();
     router.push("/auth");
     toast.success("Logged out successfully");
+  };
+
+  const handleCreatePost = () => {
+    createPostQuery({ content: message });
+    setMessage("");
   };
 
   return (
@@ -73,7 +89,7 @@ const Aside = () => {
           </Link>
         </div>
 
-        <div className=" my-2 p-2 flex  justify-start">
+        <div className="p-2 flex justify-start">
           <Link
             href="/profile/?bookmarks=true"
             className={`relative flex flex-row items-center h-11 focus:outline-none  text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6 ${
@@ -104,7 +120,7 @@ const Aside = () => {
           </Link>
         </div>
 
-        <div className=" my-2 p-2 flex  justify-start">
+        <div className="p-2 flex  justify-start">
           <Link
             href="/profile?bookmarks=false"
             className={`relative flex flex-row items-center h-11 focus:outline-none  text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6 ${
@@ -132,7 +148,29 @@ const Aside = () => {
           </Link>
         </div>
 
-        <div className=" my-2 p-2 flex  justify-start">
+        <div className="p-2 flex  justify-start">
+          <Dialog>
+            <DialogTrigger asChild>
+              <div
+                className={`relative flex flex-row items-center h-11 focus:outline-none  text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6 cursor-pointer            `}
+              >
+                <span className="inline-flex justify-center items-center ml-4">
+                  <FontAwesomeIcon icon={faSquarePlus} />
+                </span>
+                <span className="ml-2 text-sm tracking-wide truncate">
+                  Create Post
+                </span>
+              </div>
+            </DialogTrigger>
+            <EditPost
+              handleCreatePost={handleCreatePost}
+              message={message}
+              setMessage={setMessage}
+            />
+          </Dialog>
+        </div>
+
+        <div className="p-2 flex  justify-start">
           <button
             onClick={handleLogout}
             className="relative flex flex-row items-center h-11 focus:outline-none  text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"

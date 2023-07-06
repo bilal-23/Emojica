@@ -5,6 +5,7 @@ import {
   faHouse,
   faBookmark,
   faRightFromBracket,
+  faSquarePlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
@@ -13,9 +14,16 @@ import { toast } from "react-toastify";
 import { useGetProfileQuery } from "@/queries/profileQueries";
 import Link from "next/link";
 import { Loader } from "../UI/loader";
+import { Dialog, DialogTrigger } from "../UI/dialog";
+import EditPost from "../Post/edit-post";
+import { useCreatePostMutation } from "@/queries/postQueries";
 
-const MobileNav = () => {
+interface Props {}
+const MobileNav: React.FC<Props> = () => {
+  const { mutate: createPostQuery, isLoading: isCreatePostLoading } =
+    useCreatePostMutation();
   const { isLoading, data } = useGetProfileQuery();
+  const [message, setMessage] = React.useState("");
   // Merge first name and last name first letter
   const name =
     data && data?.firstName.split("")[0] + data?.lastName.split("")[0];
@@ -27,14 +35,35 @@ const MobileNav = () => {
     router.push("/auth");
     toast.success("Logged out successfully");
   };
+
+  const handleCreatePost = () => {
+    createPostQuery({ content: message });
+    setMessage("");
+  };
+
   return (
     <>
+      {isCreatePostLoading && <Loader />}
       {isLoading && !data ? (
         <Loader />
       ) : (
         <nav className="flex md:hidden  bg-gray-100 shadow lg:px-48 border-t sticky bottom-0 pb-0.5">
           <div className="w-full px-5">
             <div className="flex justify-between h-16">
+              <Link
+                href="/"
+                className={`self-center flex-shrink-0 p-1 border-transparent text-gray-700 rounded-full hover:text-gray-600 focus:outline-none focus:text-gray-600 transition duration-150 ease-in-out`}
+                aria-label="Notifications"
+              >
+                <FontAwesomeIcon
+                  icon={faHouse}
+                  style={{
+                    width: "25px",
+                    height: "25px",
+                    color: asPath === "/" ? "#6366F1" : "",
+                  }}
+                />
+              </Link>
               <Link
                 href="/explore"
                 className={`block self-center flex-shrink-0 p-1 border-transparent text-gray-700 rounded-full hover:text-gray-600 focus:outline-none focus:text-gray-600 transition duration-150 ease-in-out"
@@ -47,21 +76,6 @@ const MobileNav = () => {
                     width: "25px",
                     height: "25px",
                     color: asPath === "/explore" ? "#6366F1" : "",
-                  }}
-                />
-              </Link>
-
-              <Link
-                href="/"
-                className={`self-center flex-shrink-0 p-1 border-transparent text-gray-700 rounded-full hover:text-gray-600 focus:outline-none focus:text-gray-600 transition duration-150 ease-in-out`}
-                aria-label="Notifications"
-              >
-                <FontAwesomeIcon
-                  icon={faHouse}
-                  style={{
-                    width: "25px",
-                    height: "25px",
-                    color: asPath === "/" ? "#6366F1" : "",
                   }}
                 />
               </Link>
@@ -80,6 +94,27 @@ const MobileNav = () => {
                   }}
                 />
               </Link>
+              <button
+                className={`self-center flex-shrink-0 p-1 border-transparent text-gray-700 rounded-full hover:text-gray-600 focus:outline-none focus:text-gray-600 transition duration-150 ease-in-out `}
+                aria-label="Notifications"
+              >
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <FontAwesomeIcon
+                      icon={faSquarePlus}
+                      style={{
+                        width: "25px",
+                        height: "25px",
+                      }}
+                    />
+                  </DialogTrigger>
+                  <EditPost
+                    handleCreatePost={handleCreatePost}
+                    message={message}
+                    setMessage={setMessage}
+                  />
+                </Dialog>
+              </button>
               <Link
                 href="/profile"
                 className={`ml-2 relative flex items-center border-b-2

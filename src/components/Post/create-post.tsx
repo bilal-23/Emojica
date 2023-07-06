@@ -29,7 +29,7 @@ const CreatePost = () => {
           onChange={(e) => setMessage(e.target.value)}
           name="message"
           placeholder="Type something..."
-          className=" focus:outline-none  w-full rounded-lg p-2 text-sm bg-gray-100 border border-transparent appearance-none rounded-tg placeholder-gray-400"
+          className=" focus:outline-none w-full rounded-lg p-2 text-sm bg-gray-100 border border-transparent appearance-none rounded-tg placeholder-gray-400 resize-none overflow-y-scroll"
         ></textarea>
         <footer className="flex justify-between mt-2">
           <div className="flex gap-2">

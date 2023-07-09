@@ -37,6 +37,7 @@ export default async function handler(
             email,
             link,
             bio,
+            pic,
             updatedAt: new Date()
         });
 

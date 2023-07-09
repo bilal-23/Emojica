@@ -102,12 +102,16 @@ export const useEditProfileMutation = () => {
             email: string,
             link: string,
             bio: string,
+            pic: string;
         }) => {
             const response = await axios.patch<{ message: string }>(`/api/user/update`, formData);
             return response.data;
         },
         onSuccess: (data) => {
             queryClient.refetchQueries(["profile"]);
+            queryClient.refetchQueries(["feed-posts"]);
+            queryClient.refetchQueries(["all-posts"]);
+            queryClient.refetchQueries(["bookmarks"]);
             toast.success("Profile Updated");
         }
     });

@@ -12,11 +12,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../UI/dropdown-menu";
+import { useRouter } from "next/router";
 
 const ExplorePosts = () => {
   const { isLoading, data: posts } = useGetAllPostsQuery();
   const [sortedPosts, setSortedPosts] = useState(posts || []);
   const [appliedSort, setAppliedSort] = useState("Newest");
+  const router = useRouter();
 
   useEffect(() => {
     setSortedPosts(posts || []);
@@ -58,6 +60,7 @@ const ExplorePosts = () => {
         <FontAwesomeIcon
           icon={faChevronLeft}
           className="cursor-pointer transition-all active:scale-90"
+          onClick={() => router.back()}
         />
         <p className="text-gray-700">Explore Posts</p>
       </div>
@@ -97,7 +100,7 @@ const ExplorePosts = () => {
           </div>
           {isLoading && <Loader />}
           {posts && posts.length > 0 ? (
-            posts.map((post) => {
+            sortedPosts.map((post) => {
               return (
                 <Post
                   key={post._id}

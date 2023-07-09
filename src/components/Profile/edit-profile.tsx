@@ -13,7 +13,20 @@ import { Button } from "../UI/Button";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useEditProfileMutation } from "@/queries/profileQueries";
 import { Loader } from "../UI/loader";
-import { Love_Light } from "next/font/google";
+import { Avatar, AvatarImage } from "../UI/avatar";
+
+const avatars = [
+  "https://ik.imagekit.io/averno2301/Emojica/User_Avatar/pikachu_RVvSDjez36.png",
+  "https://ik.imagekit.io/averno2301/Emojica/User_Avatar/bullbasaur_Y85PdUY9me.png",
+  "https://ik.imagekit.io/averno2301/Emojica/User_Avatar/charmander_wymQBDZmjf.png",
+  "https://ik.imagekit.io/averno2301/Emojica/User_Avatar/eevee_UdoioiFjvy.png",
+  "https://ik.imagekit.io/averno2301/Emojica/User_Avatar/avatar_uZAJcosB-g.png",
+  "https://ik.imagekit.io/averno2301/Emojica/User_Avatar/meowth_V55QXMkA6u.png",
+  "https://ik.imagekit.io/averno2301/Emojica/User_Avatar/avatar__3__0FVtZ-e04.png",
+  "https://ik.imagekit.io/averno2301/Emojica/User_Avatar/avatar__2__EUz3ORKS9b.png",
+  "https://ik.imagekit.io/averno2301/Emojica/User_Avatar/abra_hHs9jcb40.png",
+  "https://ik.imagekit.io/averno2301/Emojica/User_Avatar/avatar__1__jCOnS8Osy.png",
+];
 
 interface Props {
   firstName: string;
@@ -22,6 +35,7 @@ interface Props {
   username: string;
   bio: string;
   link: string;
+  avatarImg: string;
 }
 const EditProfile: React.FC<Props> = ({
   firstName,
@@ -30,6 +44,7 @@ const EditProfile: React.FC<Props> = ({
   username,
   bio,
   link,
+  avatarImg,
 }) => {
   const [profile, setProfile] = useState({
     firstName,
@@ -38,6 +53,7 @@ const EditProfile: React.FC<Props> = ({
     username,
     bio,
     link,
+    avatarImg,
   });
   const { isLoading, mutate } = useEditProfileMutation();
 
@@ -46,7 +62,7 @@ const EditProfile: React.FC<Props> = ({
   };
 
   const handleSubmit = () => {
-    mutate(profile);
+    mutate({ ...profile, pic: profile.avatarImg });
   };
 
   return (
@@ -65,6 +81,27 @@ const EditProfile: React.FC<Props> = ({
             <DialogTitle>Edit Profile</DialogTitle>
             <DialogDescription className="mt-[50px] flex flex-col gap-5">
               You can update your name, bio and link.
+              <div className="grid grid-cols-5 justify-center justify-items-center items-center  sm:flex sm:justify-between flex-wrap">
+                {avatars.map((item) => {
+                  return (
+                    <Avatar
+                      className={`hover:scale-105 cursor-pointer transition-all duration-300 ${
+                        profile.avatarImg === item
+                          ? "border-red-500 border-2 scale-105"
+                          : "border-2 border-transparent"
+                      } flex justify-center items-center`}
+                      onClick={() =>
+                        setProfile({ ...profile, avatarImg: item })
+                      }
+                    >
+                      <AvatarImage
+                        src={item}
+                        className="flex justify-center items-center"
+                      />
+                    </Avatar>
+                  );
+                })}
+              </div>
               <Input
                 placeholder="First Name"
                 value={profile.firstName}

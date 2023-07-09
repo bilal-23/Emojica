@@ -67,6 +67,7 @@ const ProfileAbout: React.FC<Props> = ({ isProfile }) => {
                 link={data.link}
                 email={data.email}
                 username={data.username}
+                avatarImg={data.pic}
               />
             </div>
 
